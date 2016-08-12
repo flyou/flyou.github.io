@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://flyou.github.io/"/>
+  <link href="http://flyou.ren/"/>
   <updated>2016-08-11T03:17:22.955Z</updated>
-  <id>https://flyou.github.io/</id>
+  <id>http://flyou.ren/</id>
   
   <author>
     <name>flyou</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https://flyou.github.io/2016/08/11/hello-world/"/>
-    <id>https://flyou.github.io/2016/08/11/hello-world/</id>
+    <link href="http://flyou.ren/2016/08/11/hello-world/"/>
+    <id>http://flyou.ren/2016/08/11/hello-world/</id>
     <published>2016-08-11T03:17:22.955Z</published>
     <updated>2016-08-11T03:17:22.955Z</updated>
     
