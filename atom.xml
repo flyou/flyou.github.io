@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2016-08-11T03:17:22.955Z</updated>
+  <updated>2016-08-15T11:37:51.784Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>测试文章</title>
+    <link href="http://flyou.ren/2016/08/15/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
+    <id>http://flyou.ren/2016/08/15/测试文章/</id>
+    <published>2016-08-15T11:37:51.000Z</published>
+    <updated>2016-08-15T11:37:51.784Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
