@@ -34,7 +34,7 @@
     <link href="http://flyou.ren/2016/08/11/hello-world/"/>
     <id>http://flyou.ren/2016/08/11/hello-world/</id>
     <published>2016-08-11T03:17:22.955Z</published>
-    <updated>2016-08-11T03:17:22.955Z</updated>
+    <updated>2016-08-16T12:00:45.924Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
@@ -53,6 +53,16 @@
     
     </summary>
     
+      <category term="一级目录" scheme="http://flyou.ren/categories/%E4%B8%80%E7%BA%A7%E7%9B%AE%E5%BD%95/"/>
+    
+      <category term="二级目录" scheme="http://flyou.ren/categories/%E4%B8%80%E7%BA%A7%E7%9B%AE%E5%BD%95/%E4%BA%8C%E7%BA%A7%E7%9B%AE%E5%BD%95/"/>
+    
+      <category term="三级目录" scheme="http://flyou.ren/categories/%E4%B8%80%E7%BA%A7%E7%9B%AE%E5%BD%95/%E4%BA%8C%E7%BA%A7%E7%9B%AE%E5%BD%95/%E4%B8%89%E7%BA%A7%E7%9B%AE%E5%BD%95/"/>
+    
+    
+      <category term="第一个标签" scheme="http://flyou.ren/tags/%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A0%87%E7%AD%BE/"/>
+    
+      <category term="第二个标签" scheme="http://flyou.ren/tags/%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%A0%87%E7%AD%BE/"/>
     
   </entry>
   

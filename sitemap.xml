@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://flyou.ren/2016/08/11/hello-world/</loc>
+    
+    <lastmod>2016-08-16T12:00:45.924Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://flyou.ren/2016/08/15/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</loc>
     
     <lastmod>2016-08-15T11:37:51.784Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://flyou.ren/about/index.html</loc>
     
     <lastmod>2016-08-12T06:33:53.521Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://flyou.ren/2016/08/11/hello-world/</loc>
-    
-    <lastmod>2016-08-11T03:17:22.955Z</lastmod>
     
   </url>
   
