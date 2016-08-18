@@ -10,12 +10,10 @@
     <title>android夜间模式浅析 | </title>
     <meta name="author" content="flyou">
     
-    <meta name="description" content="##几种实现夜间模式的方式
-###1：修改theme，重启activity
-使用时定义不同的主题，通过切换主题重启acticity的方式完成切换
+    <meta name="description" content="几种实现夜间模式的方式1：修改theme，重启activity使用时定义不同的主题，通过切换主题重启acticity的方式完成切换
 优点：正儿八经的夜间模式，配色看着舒服
 缺点：图片刺眼、闪屏
-###2：覆盖一定透明度的View使用一个带黑色带透明度的View，盖在现有的activit">
+2：覆盖一定透明度的View使用一个带黑色带透明度的View，盖在现有的activity上，效果类似你带上">
     
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -264,7 +262,7 @@
             
     <div class="tags-row">
         
-            <a href="/tags/页面模式/" class="chip pink lighten-1">页面模式</a>
+            <a href="/tags/夜间模式/" class="chip pink lighten-1">夜间模式</a>
         
             <a href="/tags/入门实践/" class="chip pink lighten-1">入门实践</a>
         
@@ -272,45 +270,91 @@
 
 
             <div class="toc pink-link-context hide-on-med-and-down">
-    
+    <ol class="section table-of-contents"><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#几种实现夜间模式的方式"><span class="section table-of-contents-text">几种实现夜间模式的方式</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#1：修改theme，重启activity"><span class="section table-of-contents-text">1：修改theme，重启activity</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#2：覆盖一定透明度的View"><span class="section table-of-contents-text">2：覆盖一定透明度的View</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#3：使用动态换肤方案"><span class="section table-of-contents-text">3：使用动态换肤方案</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#4：使用-Support-Library-23-2-0-DayNight主题实现"><span class="section table-of-contents-text">4：使用 Support Library 23.2.0 DayNight主题实现</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#使用DayNight主题来实现夜间模式"><span class="section table-of-contents-text">使用DayNight主题来实现夜间模式</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#1-定义DayNight主题，及相关属性"><span class="section table-of-contents-text">1.定义DayNight主题，及相关属性</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#2-为程序设置初始模式"><span class="section table-of-contents-text">2.为程序设置初始模式</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#3-在初始化时就切换夜间模式"><span class="section table-of-contents-text">3.在初始化时就切换夜间模式</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#4-如何获取当前主题的状态"><span class="section table-of-contents-text">4.如何获取当前主题的状态</span></a></li></ol></li></ol>
 </div>
 
 
             <div class="entry pink-link-context">
-                <p>##几种实现夜间模式的方式</p>
-<p>###1：修改theme，重启activity</p>
-<p>使用时定义不同的主题，通过切换主题重启acticity的方式完成切换</p>
+                <h2 id="几种实现夜间模式的方式"><a href="#几种实现夜间模式的方式" class="headerlink" title="几种实现夜间模式的方式"></a>几种实现夜间模式的方式</h2><h3 id="1：修改theme，重启activity"><a href="#1：修改theme，重启activity" class="headerlink" title="1：修改theme，重启activity"></a>1：修改theme，重启activity</h3><p>使用时定义不同的主题，通过切换主题重启acticity的方式完成切换</p>
 <p><strong>优点</strong>：正儿八经的夜间模式，配色看着舒服</p>
 <p><strong>缺点</strong>：图片刺眼、闪屏</p>
-<p>###2：覆盖一定透明度的View<br>使用一个带黑色带透明度的View，盖在现有的activity上，效果类似你带上墨镜，看着太阳不刺眼。</p>
+<h3 id="2：覆盖一定透明度的View"><a href="#2：覆盖一定透明度的View" class="headerlink" title="2：覆盖一定透明度的View"></a>2：覆盖一定透明度的View</h3><p>使用一个带黑色带透明度的View，盖在现有的activity上，效果类似你带上墨镜，看着太阳不刺眼。</p>
 <p><strong>优点</strong>：不用重启activity，不闪屏；加上透明度过渡动画，模式之间切换非常舒服，解决了1中，白底图片依旧刺眼的问题。</p>
 <p><strong>缺点</strong>：配色没变化，就算带上墨镜，白天依旧是白天。</p>
-<p>###3：使用动态换肤方案<br>一般借助于第三方库完成换肤，如：<br><a href="https://github.com/hongyangAndroid/ChangeSkin" target="_blank" rel="external">https://github.com/hongyangAndroid/ChangeSkin</a><br><a href="https://github.com/fengjundev/Android-Skin-Loader" target="_blank" rel="external">https://github.com/fengjundev/Android-Skin-Loader</a></p>
+<h3 id="3：使用动态换肤方案"><a href="#3：使用动态换肤方案" class="headerlink" title="3：使用动态换肤方案"></a>3：使用动态换肤方案</h3><p>一般借助于第三方库完成换肤，如：<br><a href="https://github.com/hongyangAndroid/ChangeSkin" target="_blank" rel="external">https://github.com/hongyangAndroid/ChangeSkin</a><br><a href="https://github.com/fengjundev/Android-Skin-Loader" target="_blank" rel="external">https://github.com/fengjundev/Android-Skin-Loader</a></p>
 <p><strong>优点</strong>：不用重启activity，不闪屏；可以为程序提供多种皮肤方案不局限于夜间/白天模式。</p>
 <p><strong>缺点</strong>：在制作方面代价过大，侵入性较强，需要以来第三方库完成，可靠性不能得到保证。</p>
-<p>###4：使用 Support Library 23.2.0 DayNight主题实现</p>
-<p><strong>优点</strong>：Google自家产品，可靠性高，配置简单，省心省力，在仅仅需要实现夜间/日间模式的应用内强烈推荐。</p>
+<h3 id="4：使用-Support-Library-23-2-0-DayNight主题实现"><a href="#4：使用-Support-Library-23-2-0-DayNight主题实现" class="headerlink" title="4：使用 Support Library 23.2.0 DayNight主题实现"></a>4：使用 Support Library 23.2.0 DayNight主题实现</h3><p><strong>优点</strong>：Google自家产品，可靠性高，配置简单，省心省力，在仅仅需要实现夜间/日间模式的应用内强烈推荐。</p>
 <p><strong>缺点</strong>：不支持多皮肤切换算吗？貌似今天只谈夜间模式的实现……。</p>
-<p>##使用DayNight主题来实现夜间模式<br>对于前两种方式来说，从实现来说是不困难的但是对用户的体验在一定程度上是很不好的，一个需要重启activity，一个配色无法改变都是我们不推荐的。</p>
+<h2 id="使用DayNight主题来实现夜间模式"><a href="#使用DayNight主题来实现夜间模式" class="headerlink" title="使用DayNight主题来实现夜间模式"></a>使用DayNight主题来实现夜间模式</h2><p>对于前两种方式来说，从实现来说是不困难的但是对用户的体验在一定程度上是很不好的，一个需要重启activity，一个配色无法改变都是我们不推荐的。</p>
 <p>当然第三种方式市面上也有比较成熟的第三方库来完成程序的换肤，但是对于单单需要夜间模式的应用来说未免有些大材小用了。</p>
 <p>今天我们使用DayNight主题来实现换肤功能。</p>
-<p>###1.定义DayNight主题，及相关属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;style name=&quot;AppTheme&quot; parent=&quot;Theme.AppCompat.DayNight.DarkActionBar&quot;&gt;</div><div class="line">      &lt;!-- Customize your theme here. --&gt;</div><div class="line">      &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;</div><div class="line">      &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;</div><div class="line">      &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;</div><div class="line"> 		&lt;/style&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="1-定义DayNight主题，及相关属性"><a href="#1-定义DayNight主题，及相关属性" class="headerlink" title="1.定义DayNight主题，及相关属性"></a>1.定义DayNight主题，及相关属性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;style name=&quot;AppTheme&quot; parent=&quot;Theme.AppCompat.DayNight.DarkActionBar&quot;&gt;</div><div class="line">      &lt;!-- Customize your theme here. --&gt;</div><div class="line">      &lt;item name=&quot;colorPrimary&quot;&gt;@color/colorPrimary&lt;/item&gt;</div><div class="line">      &lt;item name=&quot;colorPrimaryDark&quot;&gt;@color/colorPrimaryDark&lt;/item&gt;</div><div class="line">      &lt;item name=&quot;colorAccent&quot;&gt;@color/colorAccent&lt;/item&gt;</div><div class="line"> 		&lt;/style&gt;</div></pre></td></tr></table></figure>
 <p>可以在主题中定义一些颜色尺寸等属性，在vlaues的colors.xml 声明color属性。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line">   &lt;color name=&quot;colorPrimary&quot;&gt;#3F51B5&lt;/color&gt;</div><div class="line">   &lt;color name=&quot;colorPrimaryDark&quot;&gt;#303F9F&lt;/color&gt;</div><div class="line">   &lt;color name=&quot;colorAccent&quot;&gt;#FF4081&lt;/color&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
 <p>在res下面创建values-night文件夹，创建colors.xml声明color属性</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line">   &lt;color name=&quot;colorPrimary&quot;&gt;#1f2023&lt;/color&gt;</div><div class="line">   &lt;color name=&quot;colorPrimaryDark&quot;&gt;#18181a&lt;/color&gt;</div><div class="line">   &lt;color name=&quot;colorAccent&quot;&gt;#FF4081&lt;/color&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
-<p>###2.为程序设置初始模式</p>
-<p>程序中进行主题的初始化。你需要调用 AppCompatDelegate.setDefaultNightMode() ，它有四个参数：</p>
+<h3 id="2-为程序设置初始模式"><a href="#2-为程序设置初始模式" class="headerlink" title="2.为程序设置初始模式"></a>2.为程序设置初始模式</h3><p>程序中进行主题的初始化。你需要调用 AppCompatDelegate.setDefaultNightMode() ，它有四个参数：</p>
 <p>MODE_NIGHT_NO. 使用亮色（light）主题</p>
 <p>MODE_NIGHT_YES. 使用暗色（dark）主题</p>
 <p>MODE_NIGHT_AUTO. 根据当前时间自动切换 亮色（light）/暗色（dark）主题</p>
 <p>MODE_NIGHT_FOLLOW_SYSTEM(默认选项). 设置为跟随系统，通常为 MODE_NIGHT_NO</p>
 <p>如在Application中进行初始化：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class MyApplication extends Application &#123;</div><div class="line">    static &#123;</div><div class="line">        AppCompatDelegate.setDefaultNightMode(</div><div class="line">                AppCompatDelegate.MODE_NIGHT_NO);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate() &#123;</div><div class="line">        super.onCreate();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>###3.在初始化时就切换夜间模式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class MyActivity extends AppCompatActivity &#123;</div><div class="line">    public void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        if (savedInstanceState == null) &#123;</div><div class="line">            // Set the local night mode to some value</div><div class="line">            getDelegate().setLocalNightMode(</div><div class="line">                    AppCompatDelegate.MODE_NIGHT_...);</div><div class="line">            // 调用 recreate() 使设置生效</div><div class="line">            recreate();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>###4.如何获取当前主题的状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">int currentNightMode = getResources().getConfiguration().uiMode</div><div class="line">       &amp; Configuration.UI_MODE_NIGHT_MASK;</div><div class="line"></div><div class="line">   case Configuration.UI_MODE_NIGHT_NO:</div><div class="line"></div><div class="line">   case Configuration.UI_MODE_NIGHT_YES:</div><div class="line"></div><div class="line">   case Configuration.UI_MODE_NIGHT_UNDEFINED:</div></pre></td></tr></table></figure></p>
-<p>可以通过上面面的几种状态来进行相应的操作如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">private void judeStatusOfDayNight() &#123;</div><div class="line"></div><div class="line">       int currentNightMode = getResources().getConfiguration().uiMode</div><div class="line">               &amp; Configuration.UI_MODE_NIGHT_MASK;</div><div class="line">       switch (currentNightMode) &#123;</div><div class="line">           case Configuration.UI_MODE_NIGHT_NO:</div><div class="line">               getDelegate().setDefaultNightMode(</div><div class="line">                       AppCompatDelegate.MODE_NIGHT_YES);</div><div class="line"></div><div class="line"></div><div class="line">               break;</div><div class="line">           case Configuration.UI_MODE_NIGHT_YES:</div><div class="line">                getDelegate().setDefaultNightMode(</div><div class="line">                   AppCompatDelegate.MODE_NIGHT_NO);</div><div class="line">               break;</div><div class="line">           case Configuration.UI_MODE_NIGHT_UNDEFINED:</div><div class="line">               getDelegate().setDefaultNightMode(</div><div class="line">                       AppCompatDelegate.MODE_NIGHT_AUTO);</div><div class="line">               break;</div><div class="line">       &#125;</div><div class="line">       // 调用 recreate() 使设置生效</div><div class="line">       recreate();</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<pre><code>public class MyApplication extends Application {
+static {
+    AppCompatDelegate.setDefaultNightMode(
+            AppCompatDelegate.MODE_NIGHT_NO);
+}
 
+@Override
+public void onCreate() {
+    super.onCreate();
+}
+
+}
+</code></pre><h3 id="3-在初始化时就切换夜间模式"><a href="#3-在初始化时就切换夜间模式" class="headerlink" title="3.在初始化时就切换夜间模式"></a>3.在初始化时就切换夜间模式</h3><p> <code>public class MyActivity extends AppCompatActivity {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            // Set the local night mode to some value
+            getDelegate().setLocalNightMode(
+                    AppCompatDelegate.MODE_NIGHT_...);
+            // 调用 recreate() 使设置生效
+            recreate();
+        }
+    }
+}</code></p>
+<h3 id="4-如何获取当前主题的状态"><a href="#4-如何获取当前主题的状态" class="headerlink" title="4.如何获取当前主题的状态"></a>4.如何获取当前主题的状态</h3><pre><code>int currentNightMode = getResources().getConfiguration().uiMode
+    &amp; Configuration.UI_MODE_NIGHT_MASK;
+
+case Configuration.UI_MODE_NIGHT_NO:
+
+case Configuration.UI_MODE_NIGHT_YES:
+
+case Configuration.UI_MODE_NIGHT_UNDEFINED:
+</code></pre><p>可以通过上面面的几种状态来进行相应的操作如：<br>```<br> private void judeStatusOfDayNight() {</p>
+<pre><code>    int currentNightMode = getResources().getConfiguration().uiMode
+            &amp; Configuration.UI_MODE_NIGHT_MASK;
+    switch (currentNightMode) {
+        case Configuration.UI_MODE_NIGHT_NO:
+            getDelegate().setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES);
+
+
+            break;
+        case Configuration.UI_MODE_NIGHT_YES:
+             getDelegate().setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO);
+            break;
+        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+            getDelegate().setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_AUTO);
+            break;
+    }
+    // 调用 recreate() 使设置生效
+    recreate();
+}
+</code></pre>
             </div>
         </div>
     </div>
