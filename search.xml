@@ -85,7 +85,12 @@ case Configuration.UI_MODE_NIGHT_UNDEFINED:
     // 调用 recreate() 使设置生效
     recreate();
 }
-</code></pre>]]></content>
+</code></pre><p>效果如下：</p>
+<p><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1f6y5w7d0npg20dc0m841f.gif" alt=""></p>
+<p>当然，这仅仅是一个简单的例子，如果涉及图片你需要创建drawable-night文件夹。</p>
+<p>对于一些按钮的颜色背景都需要做相应的处理，当然处理起来还是很简单的。</p>
+<p>那么现在为你的程序加上夜间模式吧。</p>
+]]></content>
     </entry>
     
     <entry>
