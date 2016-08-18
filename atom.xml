@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2016-08-18T12:19:41.419Z</updated>
+  <updated>2016-08-18T12:23:05.242Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://flyou.ren/2016/08/18/android%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F%E6%B5%85%E6%9E%90/"/>
     <id>http://flyou.ren/2016/08/18/android夜间模式浅析/</id>
     <published>2016-08-18T11:05:25.000Z</published>
-    <updated>2016-08-18T12:19:41.419Z</updated>
+    <updated>2016-08-18T12:23:05.242Z</updated>
     
     <content type="html"><![CDATA[<h2 id="几种实现夜间模式的方式"><a href="#几种实现夜间模式的方式" class="headerlink" title="几种实现夜间模式的方式"></a>几种实现夜间模式的方式</h2><h3 id="1：修改theme，重启activity"><a href="#1：修改theme，重启activity" class="headerlink" title="1：修改theme，重启activity"></a>1：修改theme，重启activity</h3><p>使用时定义不同的主题，通过切换主题重启acticity的方式完成切换</p>
 <p><strong>优点</strong>：正儿八经的夜间模式，配色看着舒服</p>
@@ -59,19 +59,18 @@ public void onCreate() {
 }
 
 }
-</code></pre><h3 id="3-在初始化时就切换夜间模式"><a href="#3-在初始化时就切换夜间模式" class="headerlink" title="3.在初始化时就切换夜间模式"></a>3.在初始化时就切换夜间模式</h3><p> <code>public class MyActivity extends AppCompatActivity {
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            // Set the local night mode to some value
-            getDelegate().setLocalNightMode(
-                    AppCompatDelegate.MODE_NIGHT_...);
-            // 调用 recreate() 使设置生效
-            recreate();
-        }
+</code></pre><h3 id="3-在初始化时就切换夜间模式"><a href="#3-在初始化时就切换夜间模式" class="headerlink" title="3.在初始化时就切换夜间模式"></a>3.在初始化时就切换夜间模式</h3><pre><code> public class MyActivity extends AppCompatActivity {
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (savedInstanceState == null) {
+        // Set the local night mode to some value
+        getDelegate().setLocalNightMode(
+                AppCompatDelegate.MODE_NIGHT_...);
+        // 调用 recreate() 使设置生效
+        recreate();
     }
-}</code></p>
-<h3 id="4-如何获取当前主题的状态"><a href="#4-如何获取当前主题的状态" class="headerlink" title="4.如何获取当前主题的状态"></a>4.如何获取当前主题的状态</h3><pre><code>int currentNightMode = getResources().getConfiguration().uiMode
+} }
+</code></pre><h3 id="4-如何获取当前主题的状态"><a href="#4-如何获取当前主题的状态" class="headerlink" title="4.如何获取当前主题的状态"></a>4.如何获取当前主题的状态</h3><pre><code>int currentNightMode = getResources().getConfiguration().uiMode
     &amp; Configuration.UI_MODE_NIGHT_MASK;
 
 case Configuration.UI_MODE_NIGHT_NO:
@@ -103,7 +102,7 @@ case Configuration.UI_MODE_NIGHT_UNDEFINED:
 }
 </code></pre><p>效果如下：</p>
 <p><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1f6y5w7d0npg20dc0m841f.gif" alt=""></p>
-<p>当然，这仅仅是一个简单的例子，如果涉及图片你需要创建drawable-night文件夹。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>当然，这仅仅是一个简单的例子，如果涉及图片你需要创建drawable-night文件夹。</p>
 <p>对于一些按钮的颜色背景都需要做相应的处理，当然处理起来还是很简单的。</p>
 <p>那么现在为你的程序加上夜间模式吧。</p>
 ]]></content>

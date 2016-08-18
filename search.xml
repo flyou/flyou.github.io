@@ -43,19 +43,18 @@ public void onCreate() {
 }
 
 }
-</code></pre><h3 id="3-在初始化时就切换夜间模式"><a href="#3-在初始化时就切换夜间模式" class="headerlink" title="3.在初始化时就切换夜间模式"></a>3.在初始化时就切换夜间模式</h3><p> <code>public class MyActivity extends AppCompatActivity {
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            // Set the local night mode to some value
-            getDelegate().setLocalNightMode(
-                    AppCompatDelegate.MODE_NIGHT_...);
-            // 调用 recreate() 使设置生效
-            recreate();
-        }
+</code></pre><h3 id="3-在初始化时就切换夜间模式"><a href="#3-在初始化时就切换夜间模式" class="headerlink" title="3.在初始化时就切换夜间模式"></a>3.在初始化时就切换夜间模式</h3><pre><code> public class MyActivity extends AppCompatActivity {
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (savedInstanceState == null) {
+        // Set the local night mode to some value
+        getDelegate().setLocalNightMode(
+                AppCompatDelegate.MODE_NIGHT_...);
+        // 调用 recreate() 使设置生效
+        recreate();
     }
-}</code></p>
-<h3 id="4-如何获取当前主题的状态"><a href="#4-如何获取当前主题的状态" class="headerlink" title="4.如何获取当前主题的状态"></a>4.如何获取当前主题的状态</h3><pre><code>int currentNightMode = getResources().getConfiguration().uiMode
+} }
+</code></pre><h3 id="4-如何获取当前主题的状态"><a href="#4-如何获取当前主题的状态" class="headerlink" title="4.如何获取当前主题的状态"></a>4.如何获取当前主题的状态</h3><pre><code>int currentNightMode = getResources().getConfiguration().uiMode
     &amp; Configuration.UI_MODE_NIGHT_MASK;
 
 case Configuration.UI_MODE_NIGHT_NO:
@@ -87,7 +86,7 @@ case Configuration.UI_MODE_NIGHT_UNDEFINED:
 }
 </code></pre><p>效果如下：</p>
 <p><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1f6y5w7d0npg20dc0m841f.gif" alt=""></p>
-<p>当然，这仅仅是一个简单的例子，如果涉及图片你需要创建drawable-night文件夹。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>当然，这仅仅是一个简单的例子，如果涉及图片你需要创建drawable-night文件夹。</p>
 <p>对于一些按钮的颜色背景都需要做相应的处理，当然处理起来还是很简单的。</p>
 <p>那么现在为你的程序加上夜间模式吧。</p>
 ]]></content>
