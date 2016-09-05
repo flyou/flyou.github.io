@@ -233,15 +233,15 @@
                 <ul class="tabs ">
                     
                         <li class="tab col s4 ">
-                            <a class="pink-text " href="#readed">已读(4)</a>
+                            <a class="light-green-text " href="#readed">已读(4)</a>
                         </li>
                     
                         <li class="tab col s4 ">
-                            <a class="pink-text " href="#reading">在读(1)</a>
+                            <a class="light-green-text " href="#reading">在读(1)</a>
                         </li>
                     
                         <li class="tab col s4 ">
-                            <a class="pink-text " href="#wanted">想读(1)</a>
+                            <a class="light-green-text " href="#wanted">想读(1)</a>
                         </li>
                     
                 </ul>
@@ -256,7 +256,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img1.doubanio.com/lpic/s1320039.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">Think in java
                                     </span>
                                     <p>评分: 9.0
@@ -282,7 +282,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img1.doubanio.com/lpic/s6050358.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">JAVA开发实战经典
                                     </span>
                                     <p>评分: 8.5
@@ -308,7 +308,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img3.doubanio.com/lpic/s28351121.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">第一行代码
                                     </span>
                                     <p>评分: 8
@@ -334,7 +334,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img3.doubanio.com/lpic/s28283342.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">Android群英传
                                     </span>
                                     <p>评分: 8.5
@@ -365,7 +365,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img3.doubanio.com/lpic/s28283341.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">Android开发艺术探索
                                     </span>
                                     <p>评分: ???
@@ -396,7 +396,7 @@
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="card-cover-image activator" src="https://img3.doubanio.com/lpic/s1669771.jpg">
                                 </div>
-                                <div class="card-content pink-link-context">
+                                <div class="card-content light-green-link-context">
                                     <span class="card-title truncate activator grey-text text-darken-4">重构
                                     </span>
                                     <p>评分: ???
@@ -456,11 +456,11 @@
 </div>
 
         <div class="fixed-action-btn float-sitemap">
-    <a class="btn-floating btn-large pink">
+    <a class="btn-floating btn-large light-green">
       <i class="fa fa-caret-square-o-up"></i>
     </a>
     <ul>
-      <li><a class="btn-return-top btn-floating waves-effect green" title="回到顶部"><i class="fa fa-arrow-circle-o-up"></i></a></li>
+      <li><a class="btn-return-top btn-floating waves-effect pink" title="回到顶部"><i class="fa fa-arrow-circle-o-up"></i></a></li>
       <li><a class="btn-floating waves-effect button-collapse yellow darken-1"  data-activates="main-menu" title="menu"><i class="fa fa-navicon"></i></a></li>
     </ul>
   </div>
@@ -503,7 +503,7 @@
     </div>
     
 
-    <div class="footer-copyright pink-link-context">
+    <div class="footer-copyright light-green-link-context">
         <div class="container">
             © 2016 flyou.ren, All rights reserved.
             <p class="right" style="margin-top: 0;"><a href="http://blog.flyou.ren">返回旧版</a> </p>
@@ -586,11 +586,11 @@
             $('li.tab a').hover(function() {
                 $(this).toggleClass('text-lighten-4');
             });
-            $('.indicator').addClass('pink lighten-2');
+            $('.indicator').addClass('light-green lighten-2');
 
             
             // 添加new标签
-            $('.menu-reading, .menu-about').append('<span class="new badge pink"></span>');
+            $('.menu-reading, .menu-about').append('<span class="new badge light-green"></span>');
             
 
             // 搜索功能
@@ -665,7 +665,7 @@
                             if (isMatch) {
                                 keywords.forEach(function(keyword) {
                                     var regS = new RegExp(keyword, "gi");
-                                    data_title = data_title.replace(regS, "<span class=\"search-keyword pink lighten-2\">" + keyword + "</span>");
+                                    data_title = data_title.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
                                 });
 
                                 str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
@@ -687,7 +687,7 @@
                                     // highlight all keywords
                                     keywords.forEach(function(keyword) {
                                         var regS = new RegExp(keyword, "gi");
-                                        match_content = match_content.replace(regS, "<span class=\"search-keyword pink lighten-2\">" + keyword + "</span>");
+                                        match_content = match_content.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
                                     });
 
                                     str += "<p class=\"search-result\">..." + match_content + "...</p>"
