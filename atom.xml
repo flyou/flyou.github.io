@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2016-09-13T01:10:40.212Z</updated>
+  <updated>2016-09-13T08:02:13.889Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -14,6 +14,151 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>微信扫一扫揭秘</title>
+    <link href="http://flyou.ren/2016/09/13/%E5%BE%AE%E4%BF%A1%E6%89%AB%E4%B8%80%E6%89%AB%E6%8F%AD%E7%A7%98/"/>
+    <id>http://flyou.ren/2016/09/13/微信扫一扫揭秘/</id>
+    <published>2016-09-13T05:55:52.000Z</published>
+    <updated>2016-09-13T08:02:13.889Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>要探索二维码的秘密之前，我们首先需要简单了解下什么是二维码。</p>
+<h3 id="什么是二维码"><a href="#什么是二维码" class="headerlink" title="什么是二维码"></a>什么是二维码</h3><blockquote>
+<p>二维条码/二维码（2-dimensional bar code）是用某种特定的几何图形按一定规律在平面（二维方向上）分布的黑白相间的图形记录数据符号信息的；在代码编制上巧妙地利用构成计算机内部逻辑基础的“0”、“1”比特流的概念，使用若干个与二进制相对应的几何形体来表示文字数值信息，通过图象输入设备或光电扫描设备自动识读以实现信息自动处理。</p>
+</blockquote>
+<p>其实简单的说二维码就是一段简单的字符串图形化的展示，它可能是一个url，一段文字，或者是一首唐诗也不错哦<br><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1f7rxxbqqnsj207s07sgmr.jpg" alt="二维码1"><br><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1f7rxyajt8nj207s07sjrt.jpg" alt="二维码2"><br><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1f7rxz0bdixj207s07s75b.jpg" alt="二维码3"></p>
+<h3 id="为什么要使用二维码"><a href="#为什么要使用二维码" class="headerlink" title="为什么要使用二维码"></a>为什么要使用二维码</h3><p>二维码的诞生可以说是真正的促进这移动互联网的发展。</p>
+<ul>
+<li>信息获取（名片、地图、WIFI密码、资料）</li>
+<li>网站跳转（跳转到微博、手机网站、网站）</li>
+<li>广告推送（用户扫码，直接浏览商家推送的视频、音频广告）</li>
+<li>手机电商（用户扫码、手机直接购物下单）</li>
+<li>防伪溯源（用户扫码、即可查看生产地；同时后台可以获取最终消费地)</li>
+<li>优惠促销（用户扫码，下载电子优惠券，抽奖）</li>
+<li>会员管理（用户手机上获取电子会员信息、VIP服务）</li>
+<li>手机支付（扫描商品二维码，通过银行或第三方支付提供的手机端通道完成支付）</li>
+</ul>
+<p>在不同的领域，不同的行业二维码都可以用来简化原来的工作流程，那么我们为什么不来试试二维码呢？</p>
+<h3 id="二维码的生成"><a href="#二维码的生成" class="headerlink" title="二维码的生成"></a>二维码的生成</h3><p>通过对上面的了解相信大家对二维码已经有了一定的了解，那么二维码是怎么生成的呢?</p>
+<blockquote>
+<p>维码一共有40个尺寸。官方叫版本Version。Version 1是21 x 21的矩阵，Version 2是 25 x<br>25的矩阵，Version 3是29的尺寸，每增加一个version，就会增加4的尺寸，公式是：(V-1)<em>4 + 21（V是版本号） 最高Version<br>40，(40-1)</em>4+21 = 177，所以最高是177 x 177 的正方形。      </p>
+</blockquote>
+<p><strong>二维码的基本结构如下：</strong></p>
+<p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1f7rz07e9bhj20le0cuaax.jpg" alt=""></p>
+<p>二维码一般由定位点图案、功能性数据、数据码和纠错码组成，生成的算法是固定的有需要的同学可以了解<br><a href="https://my.oschina.net/DeanCTO/blog/205677" title="二维码的生成原理" target="_blank" rel="external">二维码的生成原理</a>、<br><a href="http://blog.csdn.net/kelindame/article/details/45155185" title="二维码生成原理解析" target="_blank" rel="external">二维码生成原理解析</a><br>如今，基本上各个语言都有了比较好的二维码生成与解码的开源项目，有需要的同学可以自行google，本次我们呢不做具体介绍，因为不是重点啊 。</p>
+<h2 id="微信二维码揭秘"><a href="#微信二维码揭秘" class="headerlink" title="微信二维码揭秘"></a>微信二维码揭秘</h2><h3 id="微信的二维码有哪些"><a href="#微信的二维码有哪些" class="headerlink" title="微信的二维码有哪些"></a>微信的二维码有哪些</h3><p>在平时的使用中我们可以发现微信在很多的场景中都有二维码的使用在，名片，联系人，支付等尤为明显，可以说二维码已经成为微信不可或缺的设计呢功能了。<br>那么微信的二维码到底有哪些是呢？</p>
+<p><strong>以二维码扫描结果和功能区分</strong></p>
+<ol>
+<li>http(s)://www.<em>*</em>.com http链接</li>
+<li>weixin://qr/××× 微信二维码</li>
+<li><a href="http://weixin.qq.com/r/×××" target="_blank" rel="external">http://weixin.qq.com/r/×××</a> 微信二维码名片</li>
+<li><a href="https://login.weixin.qq.com/l/×××" target="_blank" rel="external">https://login.weixin.qq.com/l/×××</a> 网页登陆二维码</li>
+<li><a href="https://login.wechatapp.com/l/×××" target="_blank" rel="external">https://login.wechatapp.com/l/×××</a> 国际部网页登陆二维码</li>
+<li>weixin://wxpay/bizpayurl/××× 微信支付</li>
+<li><a href="http://weixin.qq.com/g/×××" target="_blank" rel="external">http://weixin.qq.com/g/×××</a> 微信群二维码</li>
+</ol>
+<p>其实在上面的二维码例子中大体上可以分为两类，1，4，5未一类，其他的为一类。第一类主要是普通类型和涉及登录相关的逻辑，第二类中的逻辑就是我们本次要谈论的逻辑。</p>
+<p><strong>第二类流程如下：</strong><br><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1f7rypqmgpjj20uk061js1.jpg" alt="流程图"></p>
+<h3 id="实现微信二维码逻辑"><a href="#实现微信二维码逻辑" class="headerlink" title="实现微信二维码逻辑"></a>实现微信二维码逻辑</h3><p>由上面的介绍我们很清楚的知道，我们想要实现上面的功能我们生成的二维码肯定是一个url，然后对本本地是否安装有app的判断也是在服务端实现的（其实就是个js而已，不要怕），当然在客户端也需要对自己的代码做相应的配置。</p>
+<h4 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h4><p>由于本人系Android开发工程师，对ios的了解也不是太多，所以本次配置主要是对android端而言的。<br>首先在manifest文件中配置扫描后需要跳转activity的intent-filter</p>
+<p>还需要制定对应的host、pathPrefix、scheme<br>至于host、pathPrefix、scheme是什么，大家可以自己去google下，其实只要了解Url的组成原理就ok了。</p>
+<pre><code>&lt;activity android:name=&quot;.otherTest.scan.FromUrlActicity&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;android.intent.action.VIEW&quot; /&gt;
+            &lt;category android:name=&quot;android.intent.category.BROWSABLE&quot; /&gt;
+            &lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;
+            &lt;data
+                android:host=&quot;www&quot;
+                android:pathPrefix=&quot;/com/test&quot;
+                android:scheme=&quot;flyou&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/activity&gt;
+</code></pre><p>上面的host和 pathPrefix是可以省略的，不过还是推荐大家都写上。<br>这样客户端的配置就完成了。        </p>
+<h4 id="服务端解析"><a href="#服务端解析" class="headerlink" title="服务端解析"></a>服务端解析</h4><p>首先根据浏览器的userAgent判断来自哪个终端，如果是PC则直接跳转到下载页，如果是Android或者Ios则判断本地判断本地app书否存在如果存在则根据定义的scheme打开相应页面并传递数据，如果不存在该app则跳转到下载页面。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;title&gt;我是一个测试页面&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=320.1, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;&gt;
+&lt;meta content=&quot;telephone=no&quot; name=&quot;format-detection&quot; /&gt;
+&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;
+
+&lt;script&gt;
+/*获取自定义数据*/
+function getQueryString(name) {  
+    var reg = new RegExp(&quot;(^|&amp;)&quot; + name + &quot;=([^&amp;]*)(&amp;|$)&quot;, &quot;i&quot;);  
+    var r = window.location.search.substr(1).match(reg);  
+    if (r != null) return unescape(r[2]);  
+    return null;  
+}  
+var userId=getQueryString(&quot;userId&quot;);
+var u = navigator.userAgent || &apos;&apos;;
+ /*首先判断是否是pc，若是pc访问则跳转到http://flyou.ren/ */
+var isPC = !/(iphone|ios|android|mini|mobile|mobi|Nokia|Symbian|iPod|iPad|Windows\s+Phone|MQQBrowser|wp7|wp8|UCBrowser7|UCWEB|360\s+Aphone\s+Browser)/i.test(u);
+var isAndroid = u.indexOf(&apos;Android&apos;) &gt; -1 || u.indexOf(&apos;Linux&apos;) &gt; -1; //android终端或者uc浏览器
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+if (isPC) { location.href = &quot;http://flyou.ren/&quot;; }
+else if (isAndroid) {
+    var the_href=&quot;http://flyou.ren/2016/09/13/%E5%BE%AE%E4%BF%A1%E6%89%AB%E4%B8%80%E6%89%AB%E6%8F%AD%E7%A7%98&quot;;//获得下载链接或在app下载页
+    location.href=&quot;flyou://www/com/test?userId=&quot;+userId;//打开某手机上的某个app应用，并传递参数
+    setTimeout(function(){
+        window.location=the_href;//如果超时就跳转到app下载页，或者直接下载
+    },2000);
+}
+else{
+    //服务端可以根据ios 先关逻辑做相应的判断
+    alert(&apos;宝宝暂时还不持支持IOS操作系统，宝宝会努力的&apos;)
+}
+
+&lt;/script&gt;
+
+
+&lt;/head&gt;
+
+&lt;/html&gt;
+</code></pre><h4 id="服务端返回数据处理"><a href="#服务端返回数据处理" class="headerlink" title="服务端返回数据处理"></a>服务端返回数据处理</h4><p>在对应的Acticity里处理传递回来的参数，并做相应的处理，如微信名片二维码的功能，返回给相应页面用户id，当然这个用户的userId可以是经过加密的（别我问我怎么加密，你们这么加密我也不想知道）。</p>
+<pre><code>public class FromUrlActicity extends AppCompatActivity {
+
+private TextView tvUserid;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_qrcode_acticity);
+    tvUserid = (TextView) findViewById(R.id.userid);
+    Uri uriData = this.getIntent().getData();
+    String userId = uriData.getQueryParameter(&quot;userId&quot;);
+
+    tvUserid.setText(&quot;我是来自服务器的UserId:&quot;+userId);
+
+    }
+}
+</code></pre><h4 id="扫描二维码"><a href="#扫描二维码" class="headerlink" title="扫描二维码"></a>扫描二维码</h4><p>自己活着使用第三方工具生成二维码如下</p>
+<p><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1f7s0hmygplj207s07s752.jpg" alt=""></p>
+<p><strong>二维码对应字符串：http:\henu.flyou.ren/scan?userId=553274238</strong></p>
+<p>在手机上使用浏览器扫一扫扫描二维码即可进入如下界面，并获得服务端传来的参数，完成相应的逻辑<br><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1f7s01h4fndj20u00fwwfz.jpg" alt=""></p>
+<p>当然，二维码可以向服务器传递多个数据，服务器也可以向客户端返回多个数据，分别定义获取即可。明白了上述的流程想要实现微信的上述流程也是很容易的。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>当然，二维码的功能并不仅仅局限于上面的逻辑，二维码可以应用在多个行业和领域，那么快快发动你的才智来发现新的大陆吧。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;要探索二维码的秘密之前，我们首先需要简单了解下什么是二维码。&lt;/p&gt;
+&lt;h3 id=&quot;什么是二维码&quot;&gt;&lt;a href=&quot;#什么是二维码&quot; c
+    
+    </summary>
+    
+      <category term="技术领域" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/"/>
+    
+      <category term="Android" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/Android/"/>
+    
+    
+      <category term="微信二维码" scheme="http://flyou.ren/tags/%E5%BE%AE%E4%BF%A1%E4%BA%8C%E7%BB%B4%E7%A0%81/"/>
+    
+      <category term="网页打开app" scheme="http://flyou.ren/tags/%E7%BD%91%E9%A1%B5%E6%89%93%E5%BC%80app/"/>
+    
+  </entry>
   
   <entry>
     <title>关于截图你所要了解的一切</title>
