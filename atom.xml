@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2016-09-05T08:04:13.040Z</updated>
+  <updated>2016-09-13T01:04:12.416Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -16,11 +16,349 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>关于截图你所要了解的</title>
+    <link href="http://flyou.ren/2016/09/12/%E5%85%B3%E4%BA%8E%E6%88%AA%E5%9B%BE%E4%BD%A0%E6%89%80%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%84%E4%B8%80%E5%88%87/"/>
+    <id>http://flyou.ren/2016/09/12/关于截图你所要了解的一切/</id>
+    <published>2016-09-12T07:01:38.000Z</published>
+    <updated>2016-09-13T01:04:12.416Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着为什么要使用截图功能？</p>
+<ul>
+<li>更方便记录</li>
+<li>更加便于分享</li>
+<li>更加利于传输</li>
+</ul>
+<p>在android上有哪些截屏的方法呢？</p>
+<ol>
+<li>使用adb工具进行截图</li>
+<li>使用android系统自带的截图</li>
+<li>在自己的应用中实现截图操作</li>
+</ol>
+<p>今天，就对以上三种截图的方式进行下分析，写的不好的地方还请大家指正，共同进步。</p>
+<p>##截图的实现</p>
+<h3 id="1-使用adb命令截图"><a href="#1-使用adb命令截图" class="headerlink" title="1.使用adb命令截图"></a>1.使用adb命令截图</h3><p>系统是Android 2.3以上：</p>
+<p><code>adb shell screencap -p xxx.png</code></p>
+<p>系统是Android 4.0以上：</p>
+<p><code>adb shell screenshot xxx.png</code></p>
+<p>那么上面两个有什么区别呢？</p>
+<p>screencap是从Android 2.3开始提供的一个系统级的截图工具，通过源码可以了解到screencap的实现方式，默认会从底层UI Surface去获取屏幕截图，如果失败则从linux kernel层的display framebuffer(/dev/graphics/fb0)去获取屏幕截图。</p>
+<p>screenshot是从Android 4.0开始提供的另一个截图的工具， 通过源码可以发现screenshot则是直接读取/dev/graphics/fb0去获取屏幕的图像数据。</p>
+<p>明白了这个，你就会清楚哪些电脑上的豌豆荚、腾讯手机管家等软件的屏幕截图功能是如何实现的了，其实就是调用这个这个api然后读取本地的图片而已。</p>
+<pre><code>adb shell screencap -p /sdcard/flyou.png
+adb pull /mnt/sdcard/output.png D:flyou.png
+adb shell rm /sdcard/flyou.png
+</code></pre><p>首先是调用系统截图命令将图片保存到sd卡下，然后调用adb pull将sd卡上的截图给拉出，最后删除本地文件。</p>
+<p>需要注意的是，上面的命令在电脑上操作adb命令进行截图，手机是不需要root权限的，但是如果在手机上在手机上是需要的。</p>
+<pre><code>public void shortScreen(String filepath){
+Process process = null;
+try{
+process = Runtime.getRuntime().exec(&quot;su&quot;);
+PrintStream outputStream = null;
+try {
+    outputStream = new PrintStream(new BufferedOutputStream(process.getOutputStream(), 8192));
+    outputStream.println(&quot;screencap -p &quot; + filePath);
+    outputStream.flush();
+}catch(Exception e){
+    Log.e(TAG, e);
+} finally {
+    if (outputStream != null) {
+        outputStream.close();
+    }
+}
+process.waitFor();
+}catch(Exception e){
+Log.e(TAG, e);
+}finally {
+if(process != null){
+    process.destroy();
+}
+}
+}
+</code></pre><p>在手机端需要执行如上代码便可执行adb命令截图。<br><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1f7qvwenwrkj20o50c2n04.jpg" alt=""></p>
+<h3 id="2-使用android系统自带的截图"><a href="#2-使用android系统自带的截图" class="headerlink" title="2.使用android系统自带的截图"></a>2.使用android系统自带的截图</h3><p>在android系统中，大多数的截屏快捷键都是“音量-” 加上电源键实现的，当然也有一些特殊的机型是不一样的。</p>
+<p>虽然，我们不能在开发中这个使用这个api，但是我们可以通过源码来看看它是如何是实现的。</p>
+<p>Android源码中对按键的捕获位于文件PhoneWindowManager.java（alps\frameworks\base\policy\src\com\android\internal\policy\impl）中，这个类处理所有的键盘输入事件，其中函数interceptKeyBeforeQueueing（）会对常用的按键做特殊处理。以nexus5 和小米5为例，是同时按电源键和音量下键来截屏，那么在这个函数中我们会看到这么两段代码：</p>
+<pre><code>.......
+ case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        case KeyEvent.KEYCODE_VOLUME_MUTE: {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                if (down) {
+                    if (isScreenOn &amp;&amp; !mVolumeDownKeyTriggered
+                            &amp;&amp; (event.getFlags() &amp; KeyEvent.FLAG_FALLBACK) == 0) {
+                        mVolumeDownKeyTriggered = true;
+                        mVolumeDownKeyTime = event.getDownTime();
+                            mVolumeDownKeyConsumedByScreenshotChord = false;
+                        cancelPendingPowerKeyAction();
+                        interceptScreenshotChord();
+                    }
+                } else {
+                    mVolumeDownKeyTriggered = false;
+                    cancelPendingScreenshotChordAction();
+                }
+......
+
+        case KeyEvent.KEYCODE_POWER: {
+            result &amp;= ~ACTION_PASS_TO_USER;
+            if (down) {
+                if (isScreenOn &amp;&amp; !mPowerKeyTriggered
+                        &amp;&amp; (event.getFlags() &amp; KeyEvent.FLAG_FALLBACK) == 0) {
+                    mPowerKeyTriggered = true;
+                    mPowerKeyTime = event.getDownTime();
+                    interceptScreenshotChord();
+                }
+......
+
+//以下代码是对按键处理的判断
+ private void interceptScreenshotChord() {
+    if (mVolumeDownKeyTriggered &amp;&amp; mPowerKeyTriggered &amp;&amp; !mVolumeUpKeyTriggered) {
+        final long now = SystemClock.uptimeMillis();
+        if (now &lt;= mVolumeDownKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS
+                &amp;&amp; now &lt;= mPowerKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS) {
+            mVolumeDownKeyConsumedByScreenshotChord = true;
+            cancelPendingPowerKeyAction();
+
+            mHandler.postDelayed(mScreenshotChordLongPress,
+                        ViewConfiguration.getGlobalActionKeyTimeout());
+        }
+    }
+}
+</code></pre><p>系统截图的实现：</p>
+<pre><code>private final Runnable mScreenshotChordLongPress = new Runnable() {
+    public void run() {
+        takeScreenshot();
+    }
+};
+
+//如下为takeScreenshot()的代码
+private void takeScreenshot() {
+    synchronized (mScreenshotLock) {
+        if (mScreenshotConnection != null) {
+            return;
+        }
+        ComponentName cn = new ComponentName(&quot;com.android.systemui&quot;,
+                &quot;com.android.systemui.screenshot.TakeScreenshotService&quot;);
+        Intent intent = new Intent();
+        intent.setComponent(cn);
+        ServiceConnection conn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                synchronized (mScreenshotLock) {
+                    if (mScreenshotConnection != this) {
+                        return;
+                    }
+                    Messenger messenger = new Messenger(service);
+                    Message msg = Message.obtain(null, 1);
+                    final ServiceConnection myConn = this;
+                    Handler h = new Handler(mHandler.getLooper()) {
+                        @Override
+                        public void handleMessage(Message msg) {
+                            synchronized (mScreenshotLock) {
+                                if (mScreenshotConnection == myConn) {
+                                    mContext.unbindService(mScreenshotConnection);
+                                    mScreenshotConnection = null;
+                                    mHandler.removeCallbacks(mScreenshotTimeout);
+                                }
+                            }
+                        }
+                    };
+                    msg.replyTo = new Messenger(h);
+                    msg.arg1 = msg.arg2 = 0;
+                    if (mStatusBar != null &amp;&amp; mStatusBar.isVisibleLw())
+                        msg.arg1 = 1;
+                    if (mNavigationBar != null &amp;&amp; mNavigationBar.isVisibleLw())
+                        msg.arg2 = 1;
+                    try {
+                        messenger.send(msg);
+                    } catch (RemoteException e) {
+                    }
+                }
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {}
+        };
+        if (mContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
+            mScreenshotConnection = conn;
+            mHandler.postDelayed(mScreenshotTimeout, 10000);
+        }
+    }
+}
+</code></pre><p>可以看到这个函数使用AIDL绑定了service服务到”com.android.systemui.screenshot.TakeScreenshotService”，并处理子线程返回的截图结果。</p>
+<p>PS：android系统内部真的有好多实现都是靠的handler和message</p>
+<pre><code>public class TakeScreenshotService extends Service {
+private static final String TAG = &quot;TakeScreenshotService&quot;;
+
+private static GlobalScreenshot mScreenshot;
+
+private Handler mHandler = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+            case 1:
+                final Messenger callback = msg.replyTo;
+                if (mScreenshot == null) {
+                    mScreenshot = new GlobalScreenshot(TakeScreenshotService.this);
+                }
+                mScreenshot.takeScreenshot(new Runnable() {
+                    @Override public void run() {
+                        Message reply = Message.obtain(null, 1);
+                        try {
+                            callback.send(reply);
+                        } catch (RemoteException e) {
+                        }
+                    }
+                }, msg.arg1 &gt; 0, msg.arg2 &gt; 0);
+        }
+    }
+};
+
+@Override
+public IBinder onBind(Intent intent) {
+    return new Messenger(mHandler).getBinder();
+}
+}
+</code></pre><p>最终调用，takeScreenshot获取屏幕截图</p>
+<pre><code>/**
+ * Takes a screenshot of the current display and shows an animation.
+ */
+void takeScreenshot(Runnable finisher, boolean statusBarVisible, boolean navBarVisible) {
+    // We need to orient the screenshot correctly (and the Surface api seems to take screenshots
+    // only in the natural orientation of the device :!)
+    mDisplay.getRealMetrics(mDisplayMetrics);
+    float[] dims = {mDisplayMetrics.widthPixels, mDisplayMetrics.heightPixels};
+    float degrees = getDegreesForRotation(mDisplay.getRotation());
+    boolean requiresRotation = (degrees &gt; 0);
+    if (requiresRotation) {
+        // Get the dimensions of the device in its native orientation
+        mDisplayMatrix.reset();
+        mDisplayMatrix.preRotate(-degrees);
+        mDisplayMatrix.mapPoints(dims);
+        dims[0] = Math.abs(dims[0]);
+        dims[1] = Math.abs(dims[1]);
+    }
+
+    // Take the screenshot
+    mScreenBitmap = Surface.screenshot((int) dims[0], (int) dims[1]);
+    if (mScreenBitmap == null) {
+        notifyScreenshotError(mContext, mNotificationManager);
+        finisher.run();
+        return;
+    }
+
+    if (requiresRotation) {
+        // Rotate the screenshot to the current orientation
+        Bitmap ss = Bitmap.createBitmap(mDisplayMetrics.widthPixels,
+                mDisplayMetrics.heightPixels, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(ss);
+        c.translate(ss.getWidth() / 2, ss.getHeight() / 2);
+        c.rotate(degrees);
+        c.translate(-dims[0] / 2, -dims[1] / 2);
+        c.drawBitmap(mScreenBitmap, 0, 0, null);
+        c.setBitmap(null);
+        mScreenBitmap = ss;
+    }
+
+    // Optimizations
+    mScreenBitmap.setHasAlpha(false);
+    mScreenBitmap.prepareToDraw();
+
+    // Start the post-screenshot animation
+    startAnimation(finisher, mDisplayMetrics.widthPixels, mDisplayMetrics.heightPixels,
+            statusBarVisible, navBarVisible);
+}
+</code></pre><p>最终得到Surface.screenshot（）方法，该方法属于native 层的方法，我们已经无法对代码进行查看，但是通过该方法</p>
+<pre><code>public static native Bitmap screenshot(int width, int height);
+</code></pre><p>我们可以看出，底层实际上是接受了一个图片的宽高，最终给我们返回一个半成品的bitmap，然后在java层我们再对图片进行一系列的操作。</p>
+<h3 id="3-在自己的应用中实现截图操作"><a href="#3-在自己的应用中实现截图操作" class="headerlink" title="3.在自己的应用中实现截图操作"></a>3.在自己的应用中实现截图操作</h3><p>上面说了好多应用之外截图方式的实现，那么如果我们想要在我们的app中实现截图功能，我们该如何实现呢？</p>
+<pre><code>public class ScreenShot {   
+
+// 获取指定Activity的截屏，保存到png文件   
+private static Bitmap takeScreenShot(Activity activity，String fileName){   
+
+
+//View是你需要截图的View   
+View view = activity.getWindow().getDecorView();   
+view.setDrawingCacheEnabled(true);   
+view.buildDrawingCache();   
+Bitmap b1 = view.getDrawingCache();  
+view.destroyDrawingCache();   
+savePic(b1,fileName)
+}   
+
+
+//保存到sdcard   
+private static void savePic(Bitmap b,String strFileName){   
+FileOutputStream fos = null;   
+try {   
+fos = new FileOutputStream(strFileName);   
+if (null != fos)   
+{   
+b.compress(Bitmap.CompressFormat.PNG, 90, fos);   
+fos.flush();   
+fos.close();   
+}   
+} catch (FileNotFoundException e) {   
+e.printStackTrace();   
+} catch (IOException e) {   
+e.printStackTrace();   
+}   
+}   
+}  
+</code></pre><p><strong>截图效果如下：</strong><br><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1f7qxsmer3gj20u01hcjvv.jpg" alt=""></p>
+<p>如果不想要状态栏只需要对获得bitmap进行操作，截去状态栏的高度即可</p>
+<p><strong>相关代码如下：</strong></p>
+<pre><code>//获取状态栏高度   
+Rect frame = new Rect();   
+activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);   
+int statusBarHeight = frame.top;   
+System.out.println(statusBarHeight);   
+
+//获取屏幕长和高   
+int width = activity.getWindowManager().getDefaultDisplay().getWidth();   
+int height = activity.getWindowManager().getDefaultDisplay().getHeight();   
+
+
+//去掉标题栏    
+Bitmap newBitmap = Bitmap.createBitmap(b1, 0, statusBarHeight, width, height - statusBarHeight); 
+</code></pre><p>这样就可以获取对应没有状态栏的图片。<br><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1f7qxz0kw8uj20u01f9430.jpg" alt=""><br>但是，这样往往不能满足我们在开发中的需求，往往在开发中产品会要求我们只截去内容部分的图片，那么这时我们该怎么做呢？</p>
+<p>其实方法也是很多，比如对<strong>先截去屏幕，然后对制定区域进行裁剪</strong>，<strong>使用自定义控件</strong>，其实原理也很简单，先绘制背景在确定子View的位置，再回执子View即可。但是呢这里也有几个比较简单的方法，<strong>直接获取相应布局的父布局，然后调用相关方法进行截取并保存即可</strong>。</p>
+<p>下面只给出第三种方式的实现方法，如果对上面两种实现方法感兴趣的话自己可以了解下。</p>
+<pre><code>View view = findViewById(R.id.share_layout);
+Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+view.draw(new Canvas(bmp));
+</code></pre><p>此时取到的BitMap就是你的目标布局的图片，但是使用此方法必须在数据加载完毕后使用，不然获取的截图可能是空白的，还有bitmap使用完需要记得<strong>recycle</strong>。</p>
+<p><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1f7rog43thzj20p011iad9.jpg" alt=""></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>实现屏幕截图的方法有很多，实现的方法也是多种多样的，希望大家根据自己的需要都能够找到适合自己的方法，如果写的有什么纰漏的地方，欢迎大家指正讨论。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;随着为什么要使用截图功能？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更方便记录&lt;/li&gt;
+&lt;li&gt;更加便于分享&lt;/li&gt;
+&lt;li&gt;更加利于传输&lt;/li&gt;
+
+    
+    </summary>
+    
+      <category term="技术领域" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/"/>
+    
+      <category term="Android" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/Android/"/>
+    
+    
+      <category term="android截图" scheme="http://flyou.ren/tags/android%E6%88%AA%E5%9B%BE/"/>
+    
+      <category term="屏幕截图" scheme="http://flyou.ren/tags/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE/"/>
+    
+  </entry>
+  
+  <entry>
     <title>定下几个小目标</title>
     <link href="http://flyou.ren/2016/09/05/%E5%AE%9A%E4%B8%8B%E4%B8%AA%E5%B0%8F%E7%9B%AE%E6%A0%87/"/>
     <id>http://flyou.ren/2016/09/05/定下个小目标/</id>
-    <published>2016-09-05T07:12:05.871Z</published>
-    <updated>2016-09-05T08:04:13.040Z</updated>
+    <published>2016-09-05T07:01:38.000Z</published>
+    <updated>2016-09-12T07:03:49.187Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1f7iqwwww7yj20h809kdgu.jpg" alt=""></p>
 <p>转眼已经毕业整整三个月了，一直没有好好静下来写些东西了，最近看见朋友圈都在定目标，再加上今天有空所以就也写点东西吧。</p>
