@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2016-09-13T08:02:13.889Z</updated>
+  <updated>2016-09-19T00:41:52.468Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://flyou.ren/2016/09/13/%E5%BE%AE%E4%BF%A1%E6%89%AB%E4%B8%80%E6%89%AB%E6%8F%AD%E7%A7%98/"/>
     <id>http://flyou.ren/2016/09/13/微信扫一扫揭秘/</id>
     <published>2016-09-13T05:55:52.000Z</published>
-    <updated>2016-09-13T08:02:13.889Z</updated>
+    <updated>2016-09-19T00:41:52.468Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>要探索二维码的秘密之前，我们首先需要简单了解下什么是二维码。</p>
 <h3 id="什么是二维码"><a href="#什么是二维码" class="headerlink" title="什么是二维码"></a>什么是二维码</h3><blockquote>
@@ -134,7 +134,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
     }
 }
-</code></pre><h4 id="扫描二维码"><a href="#扫描二维码" class="headerlink" title="扫描二维码"></a>扫描二维码</h4><p>自己活着使用第三方工具生成二维码如下</p>
+</code></pre><h4 id="扫描二维码"><a href="#扫描二维码" class="headerlink" title="扫描二维码"></a>扫描二维码</h4><p>自己或者使用第三方工具生成二维码如下</p>
 <p><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1f7s0hmygplj207s07s752.jpg" alt=""></p>
 <p><strong>二维码对应字符串：http:\henu.flyou.ren/scan?userId=553274238</strong></p>
 <p>在手机上使用浏览器扫一扫扫描二维码即可进入如下界面，并获得服务端传来的参数，完成相应的逻辑<br><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1f7s01h4fndj20u00fwwfz.jpg" alt=""></p>
