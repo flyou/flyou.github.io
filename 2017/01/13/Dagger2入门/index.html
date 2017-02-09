@@ -1,0 +1,1031 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+
+    <title>Dagger2入门 | </title>
+    <meta name="author" content="flyou">
+    
+    <meta name="description" content="前言什么是依赖注入众所周知Dagger是一个依赖注入(Dependency Injection)框架简称DI，那么什么是依赖注入呢？其实熟悉Spring的小伙伴应该都非常清楚，因为Spring的核心思想就是依赖注入，管是控制层的Action对象，还是业务层的Service对象，还是持久层的DAO对象">
+    
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="Dagger2入门"/>
+    <meta property="og:site_name" content="flyou Dream"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="alternate" href="/atom.xml" title="flyou Dream" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/lib/materialize.min.css">
+    <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+    
+        <link rel="stylesheet" href="/css/lib/atelier-sulphurpool-dark.css" type="text/css">
+    
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+    <img src="/weixin_favicon.png" style="position: absolute; left: -9999px; opacity: 0; filter: alpha(opacity=0);">
+
+    <nav class="indigo">
+    <div class="nav-wrapper">
+        <a href="#" data-activates="main-menu" class="button-collapse">
+            <i class="fa fa-navicon"></i>
+        </a>
+        <div class="">
+            <a href="/" class="brand-logo hide-on-med-and-down">flyou Dream</a>
+            <ul class="right hide-on-med-and-down">
+                
+                    <li>
+                        <a class="menu-home " href="/" >
+                            <i class="fa fa-home "></i>
+                            
+                            首页
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-archive " href="/archives" >
+                            <i class="fa fa-archive "></i>
+                            
+                            归档
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                            <i class="fa fa-bookmark "></i>
+                            
+                            分类
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-reading " href="/reading" >
+                            <i class="fa fa-book "></i>
+                            
+                            读书
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-about " href="/about" >
+                            <i class="fa fa-user "></i>
+                            
+                            关于
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-search modal-trigger " href="#search" >
+                            <i class="fa fa-search "></i>
+                            
+                            搜索
+                        </a>
+                    </li>
+                
+            </ul>
+            <div>
+    <ul class="side-nav indigo darken-1" id="main-menu">
+        
+        <li class="side-user">
+            <div class="row">
+                <div class="col s4 no-padding">
+                    <img class="avatar-image circle responsive-img" src="http://tva2.sinaimg.cn/crop.0.3.707.707.180/a2f7c645jw8f6qvlbp1g7j20js0jrgrz.jpg" alt="User Avatar">
+                </div>
+                <div class="info col s8 valign-wrapper no-padding">
+                    <div class="valign">
+                        <p class="name">房泽龙</p>
+                        <p class="desc">Android/Python/技术宅</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-home " href="/" >
+                    <i class="fa fa-home "></i>
+                    
+                    首页
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-archive " href="/archives" >
+                    <i class="fa fa-archive "></i>
+                    
+                    归档
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                    <i class="fa fa-bookmark "></i>
+                    
+                    分类
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-reading " href="/reading" >
+                    <i class="fa fa-book "></i>
+                    
+                    读书
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-about " href="/about" >
+                    <i class="fa fa-user "></i>
+                    
+                    关于
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-search modal-trigger " href="#search" >
+                    <i class="fa fa-search "></i>
+                    
+                    搜索
+                </a>
+            </li>
+        
+    </ul>
+
+    <ul class="side-nav indigo darken-1" id="category-menu">
+    
+
+            
+
+            <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/技术领域/">
+                    技术领域 <span class="right">4 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/Android/">
+                    Android <span class="right">4 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/随笔/">
+                    随笔 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/随笔/没事闲叨叨/">
+                    没事闲叨叨 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+    </ul>
+</div>
+
+        </div>
+    </div>
+</nav>
+
+<div id="search" class="modal search-modal">
+    <div class="row">
+        <div class="input-field col s12">
+              <input id="search-input" type="text">
+              <label for="search-input">搜索</label>
+        </div>
+
+    </div>
+    <div id="search-result" class="search-result col s12">
+
+    </div>
+</div>
+
+
+    <main>
+        <div class="container main-container">
+    <nav class="page-nav hide-on-small-only">
+    <div class="nav-wrapper indigo">
+        <span class="breadcrumb">当前位置（分类目录）</span>
+        
+            
+    
+    
+    <a class="breadcrumb" href="/categories/技术领域/">技术领域</a><a class="breadcrumb" href="/categories/技术领域/Android/">Android</a>
+
+
+        
+
+        
+    </div>
+</nav>
+
+<article>
+    <div class="card">
+        <div class="card-content">
+            
+
+            <div class="article-title">
+                
+    
+        <h1>Dagger2入门</h1>
+    
+
+
+            </div>
+            <time class="light-green-link-context" datetime="2017-01-13T05:55:52.000Z"><a href="/2017/01/13/Dagger2入门/">2017-01-13</a></time>
+
+            
+    <div class="tags-row">
+        
+            <a href="/tags/依赖注入/" class="chip light-green lighten-1">依赖注入</a>
+        
+            <a href="/tags/android注解/" class="chip light-green lighten-1">android注解</a>
+        
+    </div>
+
+
+            <div class="toc light-green-link-context hide-on-med-and-down">
+    <ol class="section table-of-contents"><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#前言"><span class="section table-of-contents-text">前言</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#什么是依赖注入"><span class="section table-of-contents-text">什么是依赖注入</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#Dagger2"><span class="section table-of-contents-text">Dagger2</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#Dagger2简介"><span class="section table-of-contents-text">Dagger2简介</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#使用Dagger2的好处"><span class="section table-of-contents-text">使用Dagger2的好处</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#Dagger2基本组成"><span class="section table-of-contents-text">Dagger2基本组成</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#Dagger2简单入门"><span class="section table-of-contents-text">Dagger2简单入门</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#Dagger2深入学习"><span class="section table-of-contents-text">Dagger2深入学习</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-4"><a class="section table-of-contents-link" href="#Singleton-使用该注解实现单例的效果"><span class="section table-of-contents-text">@Singleton 使用该注解实现单例的效果</span></a></li><li class="section table-of-contents-item section table-of-contents-level-4"><a class="section table-of-contents-link" href="#Scope-Scopes自定义注解作用域"><span class="section table-of-contents-text">@Scope: Scopes自定义注解作用域</span></a></li><li class="section table-of-contents-item section table-of-contents-level-4"><a class="section table-of-contents-link" href="#其他相关注解"><span class="section table-of-contents-text">其他相关注解</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#Dagger与MVP结合"><span class="section table-of-contents-text">Dagger与MVP结合</span></a></li></ol></li></ol>
+</div>
+
+
+            <div class="entry light-green-link-context">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="什么是依赖注入"><a href="#什么是依赖注入" class="headerlink" title="什么是依赖注入"></a>什么是依赖注入</h3><p>众所周知Dagger是一个依赖注入(Dependency Injection)框架简称DI，那么什么是依赖注入呢？其实熟悉Spring的小伙伴应该都非常清楚，因为Spring的核心思想就是依赖注入，管是控制层的Action对象，还是业务层的Service对象，还是持久层的DAO对象，都可在Spring的 管理下有机地协调、运行。</p>
+<p>那么到底什么是依赖注入呢？</p>
+<blockquote>
+<p>对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。也可以说，依赖被注入到对象中。也就是说，被注入的对象不需要重复的初始化就可以获得相应的引用。</p>
+</blockquote>
+<p><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1fcituqblytj20go0go0ss.jpg" alt=""></p>
+<p>比如说小明去超市买酱油，这样我们肯定需要一个小明的对象和酱油的对象。</p>
+<p>物品基类</p>
+<pre><code>public class Things{
+
+}  
+</code></pre><p>酱油类</p>
+<pre><code>public class Sauce extend Things{
+
+public void sauce(String type,float price){
+
+    }
+}
+</code></pre><p>小明类</p>
+<pre><code>public class XiaoMing {
+Things sauce=new Sauce(&quot;海天&quot;，5.6$);
+
+/**
+ * 买的动作
+ * @param object
+ */
+private  void buy(Things things){
+……
+……
+}
+……
+…………
+………………
+}
+</code></pre><p>代码看起来貌似没有什么大问题，但是可以注意酱油在小明类中高度耦合，也就是说明天小明不打酱油了，去买毛线的时候小明这个类就要发生更改，后天买棒棒糖的时候当然也需要更改，这样下来小明没累死，我累死了。</p>
+<p>如果使用依赖注入就不一样了</p>
+<p>小明类</p>
+<pre><code>public class XiaoMing {
+@Inject
+Things things;
+
+/**
+ * 买的动作
+ * @param object
+ */
+private  void buy(Things things){
+……
+……
+}
+……
+…………
+………………
+}
+</code></pre><p>我们根本不需要关注小明究竟买什么，也不用关注买的东西的颜色、大小、价格。也就是说被注入的地方会自动获得一个初始化好的对象。</p>
+<h2 id="Dagger2"><a href="#Dagger2" class="headerlink" title="Dagger2"></a>Dagger2</h2><h3 id="Dagger2简介"><a href="#Dagger2简介" class="headerlink" title="Dagger2简介"></a>Dagger2简介</h3><p>Dagger2是Dagger1的分支，由谷歌公司接手开发，目前的版本是2.0。Dagger2是受到AutoValue项目的启发。Dagger是依赖注入的一种，说到依赖注入，标准定义是目标类中所依赖的其他的类的初始化过程，不是通过手动编码的方式创建，而是通过技术手段可以把其他的类的已经初始化好的实例自动注入到目标类中。说简单就是一次构建，到处注入。</p>
+<h3 id="使用Dagger2的好处"><a href="#使用Dagger2的好处" class="headerlink" title="使用Dagger2的好处"></a>使用Dagger2的好处</h3><ol>
+<li><p>依赖的注入和配置独立于组件之外。</p>
+</li>
+<li><p>因为对象是在一个独立、不耦合的地方初始化，所以当注入抽象方法的时候，我们只需要修改对象的实现方法，而不用大改代码库。</p>
+</li>
+<li><p>依赖可以注入到一个组件中：我们可以注入这些依赖的模拟实现，这样使得测试更加简单。</p>
+</li>
+</ol>
+<h3 id="Dagger2基本组成"><a href="#Dagger2基本组成" class="headerlink" title="Dagger2基本组成"></a>Dagger2基本组成</h3><ul>
+<li>@Inject: 通常在需要依赖的地方使用这个注解。换句话说，你用它告诉Dagger这个类或者字段需要依赖注入。这样，Dagger就会构造一个这个类的实例并满足他们的依赖。</li>
+<li>@Module: Modules类里面的方法专门提供依赖，所以我们定义一个类，用@Module注解，这样Dagger在构造类的实例的时候，就知道从哪里去找到需要的 依赖。modules的一个重要特征是它们设计为分区并组合在一起（比如说，在我们的app中可以有多个组成在一起的modules）。</li>
+<li>@Provide: 在modules中，我们定义的方法是用这个注解，以此来告诉Dagger我们想要构造对象并提供这些依赖。</li>
+<li>@Component: Components从根本上来说就是一个注入器，也可以说是@Inject和@Module的桥梁，它的主要作用就是连接这两个部分。</li>
+</ul>
+<h3 id="Dagger2简单入门"><a href="#Dagger2简单入门" class="headerlink" title="Dagger2简单入门"></a>Dagger2简单入门</h3><ul>
+<li>引入Dagger</li>
+</ul>
+<p>首先在项目根目录的 build.gradle文件中引入apt</p>
+<pre><code>buildscript {
+repositories {
+    jcenter()
+}
+dependencies {
+    classpath &apos;com.android.tools.build:gradle:2.2.3&apos;
+    //引入相应apt
+    classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;
+    }
+}
+
+allprojects {
+repositories {
+    jcenter()
+}
+}
+</code></pre><p>然后在所在module的build.gradle做如下配置</p>
+<pre><code>//首先引入 apt
+apply plugin: &apos;com.neenbedankt.android-apt&apos;
+……
+……
+dependencies {
+//java注解
+provided &apos;javax.annotation:javax.annotation-api:1.2&apos;
+//dagger2
+compile &apos;com.google.dagger:dagger:2.5&apos;
+//dagger编译器
+apt &apos;com.google.dagger:dagger-compiler:2.5&apos;
+}
+</code></pre><ul>
+<li>简单例子</li>
+</ul>
+<p>下面继续举个简单的栗子。<br>把User对象的值赋值到Activity里去。<br>代码的简单结构如下</p>
+<p><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1fcj93ewswoj208q04rt8w.jpg" alt=""></p>
+<p>User类</p>
+<pre><code>public class User {
+private String name;
+private int age;
+
+public User() {
+}
+
+public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+}
+
+public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    this.name = name;
+}
+
+public int getAge() {
+    return age;
+}
+
+public void setAge(int age) {
+    this.age = age;
+}
+}
+</code></pre><p>UserModule类</p>
+<pre><code>@Module//标识该类提供依赖
+public class UserModule {
+@Provides//告诉Dagger我们想要构造对象并提供这些依赖
+User provideUser() {
+    return new User(&quot;周杰伦&quot;, 38);
+}
+}
+</code></pre><p>UserComponent类</p>
+<pre><code>//Component 链接被注入的地方和提供依赖的地方
+@Component(modules = UserModule.class)
+public interface UserComponent {
+void inject(DaggerActivity activity);
+}
+</code></pre><p><strong>这个时候简单的注入就基本完成了，但是我们注意到Component文件是一个接口文件，我们肯定无法直接使用，现在我们需要借助于Dagger让它帮助我们根据注解生成对象</strong></p>
+<p>点击android studio的工具栏的 make progect</p>
+<p><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1fcj9j67r96j20ff01h74j.jpg" alt=""></p>
+<p>或者</p>
+<p><img src="http://ww4.sinaimg.cn/large/a2f7c645jw1fcj9jxg4n8j207i08q0tr.jpg" alt=""></p>
+<p>就会在bulid文件夹下生成相应的文件如下：</p>
+<p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1fcj9l6t8bpj20c00abt9j.jpg" alt=""></p>
+<p>当然我们用到的暂时只有以Dagger开头的Component文件，这个时候我们就可以在activity中使用完成User的注入了</p>
+<p>DaggerActivity类</p>
+<pre><code>public class DaggerActivity extends AppCompatActivity {
+//需要注入User对象
+@Inject
+User user;
+UserComponent userComponent;
+private TextView textView;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_dagger);
+
+    this.textView = (TextView) findViewById(R.id.textView);
+    //完成对User的注入
+    userComponent = DaggerUserComponent.builder().build();
+    userComponent.inject(this);
+    //根据注入的User对象设置TextView
+    textView.setText(user.getName()+&quot;:&quot;+user.getAge());
+}
+}
+</code></pre><p>布局文件就不在放出来了，就是一个简单的textview。具体效果如下。</p>
+<p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1fcj9unkwyhj20u00fegme.jpg" alt=""></p>
+<p>这样我们就完成了Dagger的一个简单的注入，下面会介绍Dagger的一些进一步的用法</p>
+<h3 id="Dagger2深入学习"><a href="#Dagger2深入学习" class="headerlink" title="Dagger2深入学习"></a>Dagger2深入学习</h3><h4 id="Singleton-使用该注解实现单例的效果"><a href="#Singleton-使用该注解实现单例的效果" class="headerlink" title="@Singleton 使用该注解实现单例的效果"></a>@Singleton 使用该注解实现单例的效果</h4><p>还是上面的栗子，如果我们在Activity中注入两个User对象</p>
+<pre><code>public class DaggerActivity extends AppCompatActivity {
+@Inject
+User user1;
+@Inject
+User user2;
+
+UserComponent userComponent;
+private TextView textView;
+
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_dagger);
+
+    this.textView = (TextView) findViewById(R.id.textView);
+    userComponent = DaggerUserComponent.builder().build();
+    userComponent.inject(this);
+    textView.setText(&quot;user1--&gt;&quot;+user1.toString()+&quot;\nuser2--&gt;&quot;+user2);
+
+}
+}
+</code></pre><p>然后对比两者的地址。</p>
+<p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1fcjam2ptdkj20u00gzac7.jpg" alt=""></p>
+<p>可以发现两者的地址并不相同，可见Dagger为我们生成了两个对象，但是我们有时候并不需要两个对象，如一些全局的配置<br>SharedPreferences 对象、数据库管理对象等，要是在平时我们就必须自己通过手写单例来实现，但是使用Dagger的@Singleton 注解我们就可以很轻松的完成对象的单例，而丝毫不用考虑单例如何实现。</p>
+<p>UserModule类</p>
+<pre><code>@Module
+public class UserModule {
+@Singleton
+@Provides
+User provideUser() {
+    return new User(&quot;周杰伦&quot;, 38);
+    }
+}
+</code></pre><p>UserComponent类</p>
+<pre><code>@Singleton
+@Component(modules = UserModule.class)
+public interface UserComponent {
+void inject(DaggerActivity activity);
+}
+</code></pre><p>只需要一个简单的注解就可以实现单例。这时候我们需要重新点击 make project来重新生成编译注解。</p>
+<p><img src="http://ww2.sinaimg.cn/large/a2f7c645jw1fcjassogqpj20u00htgnr.jpg" alt=""></p>
+<p>再次运行，我们可以看到这次Dagger只为我们生成了一个对象。</p>
+<h4 id="Scope-Scopes自定义注解作用域"><a href="#Scope-Scopes自定义注解作用域" class="headerlink" title="@Scope: Scopes自定义注解作用域"></a>@Scope: Scopes自定义注解作用域</h4><p>Scopes可是非常的有用，Dagger2可以通过自定义注解限定注解作用域。如PerApp、perActivity等</p>
+<p>PerActivity</p>
+<pre><code>@Scope
+@Retention(RUNTIME)
+public @interface PerActivity {}
+</code></pre><p>PerApp</p>
+<pre><code>@Scope
+@Retention(RUNTIME)
+public @interface PerApp {}
+</code></pre><p>该自定义注解需要同时在Module和component中使用才会起作用，会在下面的栗子中进一步说明。</p>
+<h4 id="其他相关注解"><a href="#其他相关注解" class="headerlink" title="其他相关注解"></a>其他相关注解</h4><p>@Qualifier限定符，可以对注解做出一定的限定，具体可以参照java相关注解。</p>
+<p>懒加载 lazy 即在等到调用的时候才注入。<br>在使用的地方使用user.get()就能得到一个User对象</p>
+<pre><code>public class DaggerActivity extends AppCompatActivity {
+@Inject
+Lazy &lt;User&gt; user;
+
+UserComponent userComponent;
+private android.widget.TextView textView;
+
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_dagger);
+
+    this.textView = (TextView) findViewById(R.id.textView);
+    userComponent = DaggerUserComponent.builder().build();
+    userComponent.inject(this);
+    User myUser = this.user.get();
+    textView.setText(myUser.getName()+&quot;:&quot;+ myUser.getAge());
+}
+
+}
+</code></pre><h3 id="Dagger与MVP结合"><a href="#Dagger与MVP结合" class="headerlink" title="Dagger与MVP结合"></a>Dagger与MVP结合</h3><p>上面讲了那么多的Dagger的基础，我们还没有进行真正的运用，接下来我们就结合MVP（如果不知道什么是MVP的话，自行Gogle）来一起来做一个简单的栗子。</p>
+<p>首选看一下简单的代码结构</p>
+<p><img src="http://ww3.sinaimg.cn/large/a2f7c645jw1fcjbgzex2nj209l0addgm.jpg" alt=""></p>
+<p>可以看到我们仅仅是在原来的MVP结构上新增两个（module和component），与MVP的结合我们主要是用在对persenter的改造上，完成对Persenter的注入。</p>
+<p>由上述的代码命名我们可以很容易的看出这是一个简单模拟登陆的栗子，在model层主要完成登陆判断的逻辑，在persenter层主要是对View的控制，在module主要是完成persenter注入提供依赖，在component层主要是协调被注入Activity和module的关系。</p>
+<p>User.class</p>
+<pre><code>public class User {
+private String userName;
+private String password;
+
+public User() {
+}
+
+public User(String userName, String password) {
+    this.userName = userName;
+    this.password = password;
+}
+
+public String getUserName() {
+    return userName;
+}
+
+public void setUserName(String userName) {
+    this.userName = userName;
+}
+
+public String getPassword() {
+    return password;
+}
+
+public void setPassword(String password) {
+    this.password = password;
+}
+}
+</code></pre><p>ILoginModel.class</p>
+<pre><code>public interface ILoginModel {
+
+void login(String userName, String password,LoginListener listener);
+
+interface LoginListener {
+    void loginSuccess();
+    void loginFailed(String msg);
+}
+}
+</code></pre><p>LoginModelImpl.class</p>
+<p>完成登陆逻辑，这里可以进行网络操作，完成登陆操作，这次我们仅仅在本地模拟判断用户名和密码，这里使用postDelayed（）来模拟网络操作。</p>
+<pre><code>public class LoginModelImpl implements ILoginModel {
+
+@Override
+public void login(String userName, String password, LoginListener listener) {
+     new Handler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+    if (userName.equals(&quot;flyou&quot;) &amp;&amp; password.equals(&quot;553274238&quot;)) {
+        listener.loginSuccess();
+    } else {
+        listener.loginFailed(&quot;用户名密码错误&quot;);
+    }
+      },2000);
+}
+}
+</code></pre><p>ILoginView.class</p>
+<p>提供视图相关接口</p>
+<pre><code>public interface ILoginView {
+void showLoading();
+void hideLoading();
+void showError(String msg);
+void LoginSuccess();
+}
+</code></pre><p>LoginPersenter.class</p>
+<p>完成View和数据的协调。</p>
+<pre><code>public class LoginPersenter {
+private ILoginView loginView;
+private ILoginModel loginModel;
+
+public LoginPersenter(ILoginView loginView) {
+    this.loginModel=new LoginModelImpl();
+    this.loginView = loginView;
+}
+public void login(final String userName, final String password){
+    loginView.showLoading();
+
+            loginModel.login(userName, password, new ILoginModel.LoginListener() {
+                @Override
+                public void loginSuccess() {
+                    loginView.hideLoading();
+                    loginView.LoginSuccess();
+                }
+
+                @Override
+                public void loginFailed(String msg) {
+                    loginView.hideLoading();
+                    loginView.showError(msg);
+                }
+            });
+        }
+       }
+}
+</code></pre><p>PerApp.class</p>
+<p>自定义注解范围</p>
+<pre><code>@Scope
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+
+public @interface PerApp {
+}
+</code></pre><p>LoginPersenterModule.class</p>
+<p><strong>和上面简单的例子一样我们需要使用LoginPersenter就要完成对LoginPersenter的注入，唯一不同就是这里的我们是这里我们依赖的LoginPersenter需要参数，那么我们再这里就要完成第参数的依赖，如果有多个参数我们就要完成对多个参数的依赖</strong></p>
+<pre><code>@Module
+public class LoginPersenterModule {
+private LoginActivity loginActivity;
+
+public LoginPersenterModule(LoginActivity loginActivity) {
+    this.loginActivity = loginActivity;
+}
+@PerApp
+@Provides
+LoginActivity provideLoginActivity(){
+    return loginActivity;
+}
+
+@PerApp
+@Provides
+LoginPersenter ProvideLoginPersenter(LoginActivity loginActivity){
+    return new LoginPersenter(loginActivity);
+}
+}
+</code></pre><p>LoginPersenterCompoent.class<br>完成module与注入地方的关系协调</p>
+<pre><code>@PerApp//定义注解范围
+@Singleton
+@Component(modules = LoginPersenterModule.class)
+public interface LoginPersenterCompoent {
+void inject(LoginActivity activity);
+}
+</code></pre><p>LoginActivity.class</p>
+<pre><code>public class LoginActivity extends AppCompatActivity implements ILoginView {
+@Inject
+LoginPersenter loginPersenter;
+private LoginPersenterCompoent loginPersenterCompoent;
+private android.widget.EditText userName;
+ProgressDialog progressDialog;
+PasswordToggleEditText2 password;
+
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_login);
+    this.password = (PasswordToggleEditText2) findViewById(R.id.password);
+    this.userName = (EditText) findViewById(R.id.userName);
+    loginPersenterCompoent= DaggerLoginPersenterCompoent.builder()
+    .loginPersenterModule(new LoginPersenterModule(this)).build();
+    loginPersenterCompoent.inject(this);
+}
+
+public void login(View view) {
+    loginPersenter.login(userName.getText().toString().trim(),password.getText().toString().trim());
+
+}
+
+@Override
+public void showLoading() {
+     progressDialog=ProgressDialog.show(LoginActivity.this,&quot;正在登录&quot;,&quot;正在登录请稍后……&quot;,true,false);
+}
+
+@Override
+public void hideLoading() {
+    progressDialog.dismiss();
+}
+
+@Override
+public void showError(String msg) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+}
+
+@Override
+public void LoginSuccess() {
+    Toast.makeText(this, &quot;登录成功&quot;, Toast.LENGTH_SHORT).show();
+}
+}
+</code></pre><p>布局文件真的很简单，就不再贴出了。</p>
+<p><img src="http://ww1.sinaimg.cn/large/a2f7c645jw1fcjx0fejoyg20dc0npqjg.gif" alt=""></p>
+<p>到这里，文章就基本结束了，笔者有什么写错的地方欢迎拍砖~</p>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+    <section id="comment">
+        <div class="card">
+            <div class="card-content">
+                <!-- Duoshuo Comment BEGIN -->
+                <div class="ds-thread" data-thread-key="2017/01/13/Dagger2入门/" data-title="Dagger2入门" data-url="http://flyou.ren/2017/01/13/Dagger2入门/"></div>
+
+                <script type="text/javascript">
+                    console.log(document.querySelector('.ds-thread'));
+                    var duoshuoQuery = {
+                        short_name: 'flyou'
+                    };
+                    (function() {
+                        var ds = document.createElement('script');
+                        ds.type = 'text/javascript';
+                        ds.async = true;
+                        ds.src = (document.location.protocol == 'https:'
+                            ? 'https:'
+                            : 'http:') + '//static.duoshuo.com/embed.js';
+                        ds.charset = 'UTF-8';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+                    })();
+                </script>
+                <!-- Duoshuo Comment END -->
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
+        <div class="fixed-action-btn float-sitemap">
+    <a class="btn-floating btn-large light-green">
+      <i class="fa fa-caret-square-o-up"></i>
+    </a>
+    <ul>
+      <li><a class="btn-return-top btn-floating waves-effect pink" title="回到顶部"><i class="fa fa-arrow-circle-o-up"></i></a></li>
+      <li><a class="btn-floating waves-effect button-collapse yellow darken-1"  data-activates="main-menu" title="menu"><i class="fa fa-navicon"></i></a></li>
+    </ul>
+  </div>
+
+    </main>
+    <footer class="page-footer indigo darken-1">
+    
+    <div class="container">
+        <div class="row">
+            
+            <div class="social-group col m3 s12">
+                <h5 class="white-text">社交</h5>
+                
+                    <a class="social-link" href="http://weibo.com/fangjaylong" target="_blank">
+                        <i class="fa fa-2x fa-weibo"></i>
+                    </a>
+                
+                    <a class="social-link" href="https://github.com/flyou" target="_blank">
+                        <i class="fa fa-2x fa-github"></i>
+                    </a>
+                
+                    <a class="social-link" href="/atom.xml" target="_blank">
+                        <i class="fa fa-2x fa-rss"></i>
+                    </a>
+                
+            </div>
+            
+
+            
+            <div class="col m9 s12">
+                <h5 class="white-text">友情链接</h5>
+                
+                    <a class="social-link" href="http://gank.io/" target="_blank">干货集中营</a>
+                
+                    <a class="social-link" href="http://www.androiddevtools.cn/" target="_blank">AndroidDevTools</a>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <div class="footer-copyright light-green-link-context">
+        <div class="container">
+            © 2016 flyou.ren, All rights reserved.
+            <p class="right" style="margin-top: 0;"><a href="http://blog.flyou.ren">返回旧版</a> </p>
+			 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span style="margin-left: 80px;" id="busuanzi_container_site_pv">您是本站第 <span id="busuanzi_value_site_pv"></span> 位访问者</span>
+        </div>
+    </div>
+</footer>
+
+
+    <noscript>
+    <div class="noscript">
+        <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+    </div>
+</noscript>
+<div class="noscript">
+    <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+</div>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+
+<script>
+    (function($) {
+        $(document).ready(function() {
+            // 隐藏禁用javascript（针对微信内置浏览器）的提示
+            $('.noscript').hide();
+
+            // 图片缩放效果
+            var $imgs = $('img').not('.slider-image').not('.avatar-image').not('.carousel-image').not('.card-cover-image').not('.qrcode');
+
+            // 给图片加上点击放大效果（materialbox插件）
+            $imgs.addClass('materialboxed').each(function(i, el) {
+                $(this).attr('data-caption', $(this).attr('alt') || ' ');
+            }).materialbox();
+
+            // 优化表格的显示
+            $('table').each(function() {
+                var $table = $(this);
+                // 除去多行代码的情况
+                if ($table.find('pre').length == 0) {
+                    $table.addClass('responsive-table striped bordered');
+                }
+            });
+
+            // 首页幻灯片
+            $('.slider').slider({indicators: true, full_width: true, interval: 8000});
+
+            $(".button-collapse").sideNav();
+            $(".category-menu").sideNav();
+
+            // 针对gallery post
+            $('.carousel').carousel({full_width: true});
+            $('.carousel-control.prev').click(function() {
+                $('.carousel').carousel('prev');
+            });
+            $('.carousel-control.next').click(function() {
+                $('.carousel').carousel('next');
+            });
+
+            // 文章目录
+            $('article').not('.simple-article').find('h1').add('h2').add('h3').add('h4').add('h5').add('h6').scrollSpy();
+            // 修正文章目录的left-border颜色
+            var color = $('.table-of-contents-text').css('color');
+            $('.table-of-contents-link').css('border-left-color', color);
+
+            // 针对移动端做的优化：FAB按钮点击一下收回
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $('.fixed-action-btn').addClass('click-to-toggle');
+            }
+            // 回到顶部
+            $('.btn-return-top').click(function() {
+                $('body, html').animate({
+                    scrollTop: 0
+                }, 500);
+            });
+
+            // 重置读书页面的Tab标签页的颜色
+            $('li.tab a').hover(function() {
+                $(this).toggleClass('text-lighten-4');
+            });
+            $('.indicator').addClass('light-green lighten-2');
+
+            
+            // 添加new标签
+            $('.menu-reading, .menu-about').append('<span class="new badge light-green"></span>');
+            
+
+            // 搜索功能
+            $('.modal-trigger').leanModal({
+                // 打开搜索框时自动聚焦
+                ready: function() {
+                    if ($('#search').is(":visible")) {
+                        $('#search-input').focus();
+                    }
+                }
+            });
+            var searchXml = "search.xml";
+            if (searchXml.length == 0) {
+             	searchXml = "search.xml";
+            }
+            var searchPath = "/" + searchXml;
+            initSearch(searchPath, 'search-input', 'search-result');
+        });
+
+        // 初始化搜索与匹配函数
+        var initSearch = function(path, search_id, content_id) {
+            'use strict';
+            $.ajax({
+                url: path,
+                dataType: "xml",
+                success: function(xmlResponse) {
+                    // get the contents from search data
+                    var datas = $("entry", xmlResponse).map(function() {
+                        return {
+                            title: $("title", this).text(),
+                            content: $("content", this).text(),
+                            url: $("url", this).text()
+                        };
+                    }).get();
+                    var $input = document.getElementById(search_id);
+                    var $resultContent = document.getElementById(content_id);
+                    $input.addEventListener('input', function() {
+                        var str = '<ul class=\"search-result-list\">';
+                        var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                        $resultContent.innerHTML = "";
+                        if (this.value.trim().length <= 0) {
+                            return;
+                        }
+                        // perform local searching
+                        datas.forEach(function(data) {
+                            var isMatch = true;
+                            var content_index = [];
+                            var data_title = data.title.trim().toLowerCase();
+                            var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                            var data_url = data.url;
+                            var index_title = -1;
+                            var index_content = -1;
+                            var first_occur = -1;
+                            // only match artiles with not empty titles and contents
+                            if (data_title != '' && data_content != '') {
+                                keywords.forEach(function(keyword, i) {
+                                    index_title = data_title.indexOf(keyword);
+                                    index_content = data_content.indexOf(keyword);
+                                    if (index_title < 0 && index_content < 0) {
+                                        isMatch = false;
+                                    } else {
+                                        if (index_content < 0) {
+                                            index_content = 0;
+                                        }
+                                        if (i == 0) {
+                                            first_occur = index_content;
+                                        }
+                                    }
+                                });
+                            }
+                            // show search results
+                            if (isMatch) {
+                                keywords.forEach(function(keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    data_title = data_title.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
+                                });
+
+                                str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                                var content = data.content.trim().replace(/<[^>]+>/g, "");
+                                if (first_occur >= 0) {
+                                    // cut out 100 characters
+                                    var start = first_occur - 20;
+                                    var end = first_occur + 80;
+                                    if (start < 0) {
+                                        start = 0;
+                                    }
+                                    if (start == 0) {
+                                        end = 100;
+                                    }
+                                    if (end > content.length) {
+                                        end = content.length;
+                                    }
+                                    var match_content = content.substring(start, end);
+                                    // highlight all keywords
+                                    keywords.forEach(function(keyword) {
+                                        var regS = new RegExp(keyword, "gi");
+                                        match_content = match_content.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
+                                    });
+
+                                    str += "<p class=\"search-result\">..." + match_content + "...</p>"
+                                }
+                                str += "</li>";
+                            }
+                        });
+                        str += "</ul>";
+                        $resultContent.innerHTML = str;
+                    });
+                }
+            });
+        }
+    })(jQuery);
+</script>
+
+
+<script src="/js/prettify.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("pre").addClass("prettyprint");
+        prettyPrint();
+    });
+</script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</body>
+</html>
