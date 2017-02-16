@@ -180,16 +180,16 @@
         
 
             <li class="collapse-level-1" collapse-level="1">
-                <a class="no-padding" href="/categories/技术领域/安全/">
-                    安全 <span class="right">1 篇</span></a>
+                <a class="no-padding" href="/categories/技术领域/Android/">
+                    Android <span class="right">4 篇</span></a>
                 </a>
             </li>
 
         
 
             <li class="collapse-level-1" collapse-level="1">
-                <a class="no-padding" href="/categories/技术领域/Android/">
-                    Android <span class="right">4 篇</span></a>
+                <a class="no-padding" href="/categories/技术领域/安全/">
+                    安全 <span class="right">1 篇</span></a>
                 </a>
             </li>
 
@@ -300,8 +300,9 @@
 <p>adb backup是adb众多命令中的一个，主要作用是备份手机中的文件，其命令操作如下：</p>
 <p>adb backup [-f <file>] [-apk|-noapk] [-shared|-noshared][-all] [-system|nosystem][<packages...>]<br><br>参数简介：<br>代码 -f<file>设置备份后的文件名和路径。比如”C:\dxy.ab”，扩展名是ab。<br><br>代码:-apk|-noapk选择是否备份APK程序本身。<br><br>代码:-shared|-noshared是否备份SD卡。<br><br>代码:-system|-nosystem是否备份系统程序。<br><br>代码:<packages...>指定备份具体的应用程序。<br></packages...></file></packages...></file></p>
 <p>看了如上介绍想必大家就清楚了，小明使用该条命令把女同事手机上的探探应用以及该应用的用户资料一并备份到了自己的电脑上。<br><br><strong>com.tantan.apk</strong>对就是这个文件，虽然这个问价是apk结尾的但他不是一个可安装的apk文件，我们不能直接去安装这个应用。在备份的时候我们可以给这个文件起任意的名字，放在任意的位置。我里没有指定目录，所以文件就保存在命令行当时所在的位置。D:</p>
-<p>接下来，小明拿来了小杰的手机然后又敲了一条命令。<br>    adb restore com.tantan.apk</p>
-<p>在小杰的手机上点了次确认，这样小杰的手机上就装了一个和女同事一样的探探</p>
+<p>接下来，小明拿来了小杰的手机然后又敲了一条命令。</p>
+<pre><code>adb restore com.tantan.apk
+</code></pre><p>在小杰的手机上点了次确认，这样小杰的手机上就装了一个和女同事一样的探探</p>
 <p><img src="http://olebohgyh.bkt.clouddn.com/17-2-16/31412667-file_1487232736235_d3a8.png" alt=""></p>
 <p>然后他把女同事的暗恋对象设成了自己，把自己的暗恋对象设成了女同事</p>
 <h2 id="唠叨"><a href="#唠叨" class="headerlink" title="唠叨"></a>唠叨</h2><p>还好这次的小杰是没有恶意的，不然就不好了……</p>
