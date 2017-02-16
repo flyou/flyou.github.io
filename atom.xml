@@ -483,6 +483,58 @@ public void LoginSuccess() {
   </entry>
   
   <entry>
+    <title>应用安全之[adb backup]</title>
+    <link href="http://flyou.ren/2016/12/16/%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8%E4%B9%8B%5Badb%20backup%5D/"/>
+    <id>http://flyou.ren/2016/12/16/应用安全之[adb backup]/</id>
+    <published>2016-12-15T18:55:52.000Z</published>
+    <updated>2017-02-16T08:22:40.052Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>首先讲个故事，小杰喜欢上了公司的女同事，但是却不敢向她要联系方式，偶然间她发现女同事竟然还上探探，于是小杰立刻拿起了手机在自己手机上下载了一个探探。滑了整整一星期都没遇见女同事，屏保都划破了……<br><img src="http://olebohgyh.bkt.clouddn.com/17-2-16/82711797-file_1487230714653_10813.png" alt=""></p>
+<p>作为同事的小明终于看不下去了，就提出了要帮他的想法，说可以帮助小杰帮忙把女同事的探探设置自己为暗恋对象，小杰不敢相信但是还是非常虔诚的接受了小明提出的帮助。</p>
+<p>一天后，小杰请小明大吃了一顿……</p>
+<p>事情的经过是这样的，小明以测试为由说要用女同事的手机，于是女同事就来到小明的座位上，看着小明用自己的手机进行测试，可是小明就敲了几行命令就把手机还给了女同事并连声道谢，不解的女同事寒暄着离开了。然后事情就按照小明所说的发生了……<br><img src="http://olebohgyh.bkt.clouddn.com/17-2-16/56357804-file_1487231323629_17b7d.png" alt=""></p>
+<p>##到底发生了什么</p>
+<h3 id="漏洞背景"><a href="#漏洞背景" class="headerlink" title="漏洞背景"></a>漏洞背景</h3><blockquote>
+<p>在谷歌2010年发布Android 2.2 Froyo (冻酸奶)系统中，谷歌引入一个了系统备份的功能，允许用户备份系统应用和第三方应用的apk安装包和应用数据，以便在刷机或者数据丢失后恢复应用。 第三方应用开发者需要在应用的AndroidManifest.xml文件中配置allowBackup标志(默认为true)来设置应用数据是否能能够 被备份或恢复。</p>
+<p>当这个标志被设置为true时应用程序数据可以在手机未获取ROOT的情况下通过adb调试工具来备份和恢复，这就允许恶意攻击者在接触用户手机的情况下 在短时间内启动手机USB调试功能来窃取那些能够受到AllowBackup漏洞影响的应用的数据，造成用户隐私泄露甚至财产损失。</p>
+</blockquote>
+<h3 id="事情经过"><a href="#事情经过" class="headerlink" title="事情经过"></a>事情经过</h3><p>接下来就来讲一下到底发生了什么。</p>
+<p>首先小明邀请女同事来到自己的座位，把女同事的手机连接到了自己的PC上,并敲下了如下命令，确保了女同事的手机已经和自己的PC进行了连接</p>
+<pre><code>adb devices
+</code></pre><p><img src="http://olebohgyh.bkt.clouddn.com/17-2-16/75451917-file_1487231636025_10084.png" alt=""><br>然后敲下了如下命令：</p>
+<pre><code>adb backup -nosystem -noshared -apk -f com.tantan.apk com.p1.moblie.putong
+</code></pre><p>并在女同事手机上点了个确认按钮，30秒后就把手机还给了女同事。</p>
+<p><strong> adb backup</strong>又是什么鬼？</p>
+<p>adb backup是adb众多命令中的一个，主要作用是备份手机中的文件，其命令操作如下：</p>
+<p>adb backup [-f <file>] [-apk|-noapk] [-shared|-noshared][-all] [-system|nosystem][<packages...>]<br><br>参数简介：<br>代码 -f<file>设置备份后的文件名和路径。比如”C:\dxy.ab”，扩展名是ab。<br><br>代码:-apk|-noapk选择是否备份APK程序本身。<br><br>代码:-shared|-noshared是否备份SD卡。<br><br>代码:-system|-nosystem是否备份系统程序。<br><br>代码:<packages...>指定备份具体的应用程序。<br></packages...></file></packages...></file></p>
+<p>看了如上介绍想必大家就清楚了，小明使用该条命令把女同事手机上的探探应用以及该应用的用户资料一并备份到了自己的电脑上。<br><br><strong>com.tantan.apk</strong>对就是这个文件，虽然这个问价是apk结尾的但他不是一个可安装的apk文件，我们不能直接去安装这个应用。在备份的时候我们可以给这个文件起任意的名字，放在任意的位置。我里没有指定目录，所以文件就保存在命令行当时所在的位置。D:</p>
+<p>接下来，小明拿来了小杰的手机然后又敲了一条命令。<br>    adb restore com.tantan.apk</p>
+<p>在小杰的手机上点了次确认，这样小杰的手机上就装了一个和女同事一样的探探</p>
+<p><img src="http://olebohgyh.bkt.clouddn.com/17-2-16/31412667-file_1487232736235_d3a8.png" alt=""></p>
+<p>然后他把女同事的暗恋对象设成了自己，把自己的暗恋对象设成了女同事</p>
+<h2 id="唠叨"><a href="#唠叨" class="headerlink" title="唠叨"></a>唠叨</h2><p>还好这次的小杰是没有恶意的，不然就不好了……</p>
+<p>试想一下，如果是的网盘或者是团购应用被别人取得的话，会发生什么。当然我没有去试太多应用是否存在这样的问题，XX网盘，XX哪，XX团购均还存在这样的问题。</p>
+<p><strong>最后申明下，我写下这篇文章没有什么恶意，只是想更多的开发者提高自己的开发意识，在应用上线时尽量关闭allowBackup，还有就是建议用户提高安全意识，手机加一个锁，如果手机加密的话那么刚才的故事就不会发生了。最后，关于为什么用探探举证例子，因为小杰真的在用探探啊</strong></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;首先讲个故事，小杰喜欢上了公司的女同事，但是却不敢向她要联系方式，偶然间她发现女同事竟然还上探探，于是小杰立刻拿起了手机在自己手机上下载了一
+    
+    </summary>
+    
+      <category term="技术领域" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/"/>
+    
+      <category term="安全" scheme="http://flyou.ren/categories/%E6%8A%80%E6%9C%AF%E9%A2%86%E5%9F%9F/%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="应用备份" scheme="http://flyou.ren/tags/%E5%BA%94%E7%94%A8%E5%A4%87%E4%BB%BD/"/>
+    
+      <category term="应用安全" scheme="http://flyou.ren/tags/%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>微信扫一扫揭秘</title>
     <link href="http://flyou.ren/2016/09/13/%E5%BE%AE%E4%BF%A1%E6%89%AB%E4%B8%80%E6%89%AB%E6%8F%AD%E7%A7%98/"/>
     <id>http://flyou.ren/2016/09/13/微信扫一扫揭秘/</id>
