@@ -1171,42 +1171,6 @@ case Configuration.UI_MODE_NIGHT_UNDEFINED:
   
   <entry>
     <title>Hello Hexo</title>
-    <link href="http://flyou.ren/2016/08/13/hello-world/"/>
-    <id>http://flyou.ren/2016/08/13/hello-world/</id>
-    <published>2016-08-13T05:55:52.000Z</published>
-    <updated>2017-02-21T01:37:22.966Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="我的Blog发展史"><a href="#我的Blog发展史" class="headerlink" title="我的Blog发展史"></a>我的Blog发展史</h2><p>从12年开始写博客到现在，自己也接触了很多的博客，比如博客园，CSDD等，再到后来自己又接触到了WordPress，在上面写了一段时间总体来说是不错的，但是相应速度总是觉得有点慢。<br>于是便有了现在的博客，相比于以前用过的Blog，给予node.js 使其的响应速度可以说是相当的快，再加上MarkDown语法的支持，使得用它写作简直爽到飞，好吧就从今天开始入手吧。</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>处于便于查看的目的，下面的提示命令就不删除了，哈哈。</p>
-<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;我的Blog发展史&quot;&gt;&lt;a href=&quot;#我的Blog发展史&quot; class=&quot;headerlink&quot; title=&quot;我的Blog发展史&quot;&gt;&lt;/a&gt;我的Blog发展史&lt;/h2&gt;&lt;p&gt;从12年开始写博客到现在，自己也接触了很多的博客，比如博客园，CSDD等，再到后来自
-    
-    </summary>
-    
-      <category term="随笔" scheme="http://flyou.ren/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-      <category term="没事闲叨叨" scheme="http://flyou.ren/categories/%E9%9A%8F%E7%AC%94/%E6%B2%A1%E4%BA%8B%E9%97%B2%E5%8F%A8%E5%8F%A8/"/>
-    
-    
-      <category term="第一篇文章" scheme="http://flyou.ren/tags/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
-    
-      <category term="Hello Hexo" scheme="http://flyou.ren/tags/Hello-Hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello Hexo</title>
     <link href="http://flyou.ren/2016/08/11/Hello%20Hexo/"/>
     <id>http://flyou.ren/2016/08/11/Hello Hexo/</id>
     <published>2016-08-11T03:17:22.955Z</published>
