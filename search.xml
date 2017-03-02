@@ -42,14 +42,13 @@ valueAnimator.start();
 <h2 id="ObjectAnimator"><a href="#ObjectAnimator" class="headerlink" title="ObjectAnimator"></a>ObjectAnimator</h2><h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><p>ObjectAnimator是ValueAnimator的子类，ObjectAnimato可以对任意对象进行操作，使用ObjectAnimato可以帮助我们很轻易的完成对任意对象的动画操作，比如View的alpha、scaleX、scaleY、rotationX、rotationY、translationX、translationY、X、Y等。<br><br>为什么我们可以使用View的这些属性呢？因为它在View重定义的有，如下部分：<br><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fd7gdhznkoj30ge0dogmm.jpg" alt=""></p>
 <p>例如    ：<br></p>
 <ul>
-<li><p>实现对View的缩放操作。</p>
-<pre><code>objectAnimator = new ObjectAnimator()
-        .ofFloat(image, &quot;scaleX&quot;, 1f, 0f, 1f);
-        objectAnimator.setDuration(2000);
-        objectAnimator.start();
-</code></pre></li>
+<li>实现对View的缩放操作。</li>
 </ul>
-<ul>
+<pre><code>objectAnimator = new ObjectAnimator()
+.ofFloat(image, &quot;scaleX&quot;, 1f, 0f, 1f);
+objectAnimator.setDuration(2000);
+objectAnimator.start();
+</code></pre><ul>
 <li>实现对View的旋转操作。</li>
 </ul>
 <pre><code>objectAnimator = new ObjectAnimator()
@@ -64,16 +63,16 @@ valueAnimator.start();
       objectAnimator.setDuration(2000);
       objectAnimator.start();
 </code></pre><ul>
-<li><p>实现对View的位移操作</p>
-<pre><code>objectAnimator = new ObjectAnimator()
-        .ofFloat(image, &quot;translationX&quot;, 0, 300, 0);
-        objectAnimator.setDuration(2000);
-        objectAnimator.start();
-</code></pre></li>
+<li>实现对View的位移操作</li>
 </ul>
-<p><strong>当然，我们还可以借助于animatorSet完成组合动画的操作，并控制动画播放的顺序</strong></p>
+<pre><code>objectAnimator = new ObjectAnimator()
+.ofFloat(image, &quot;scaleX&quot;, 1f, 0f, 1f);
+objectAnimator.setDuration(2000);
+objectAnimator.start();
+</code></pre><p><strong>当然，我们还可以借助于animatorSet完成组合动画的操作，并控制动画播放的顺序</strong></p>
 <ul>
-<li><p>实现组合动画</p>
+<li>实现组合动画</li>
+</ul>
 <pre><code>ObjectAnimator alpha = new ObjectAnimator()
         .ofFloat(image, &quot;alpha&quot;, 1f, 0, 1);
         ObjectAnimator translationX = new ObjectAnimator()
@@ -84,11 +83,10 @@ valueAnimator.start();
         animatorSet.setDuration(3000);
         animatorSet.playTogether(alpha, translationX, rotationX);
         animatorSet.start();
-</code></pre></li>
-</ul>
-<p>透明度变化动画：从完全不透明到透明再到完全不透明<br><br>平移动画：将坐标从现在位置向X正方向偏移300然后再变到0<br><br>旋转动画：将View旋转360°<br><br>然后设置三个动画一起播放</p>
+</code></pre><p>透明度变化动画：从完全不透明到透明再到完全不透明<br><br>平移动画：将坐标从现在位置向X正方向偏移300然后再变到0<br><br>旋转动画：将View旋转360°<br><br>然后设置三个动画一起播放</p>
 <ul>
-<li><p>实现次序播放控制</p>
+<li>实现次序播放控制</li>
+</ul>
 <pre><code>ObjectAnimator alpha1 = new ObjectAnimator()
         .ofFloat(image, &quot;alpha&quot;, 1f, 0.2f);
         ObjectAnimator alpha2 = new ObjectAnimator()
@@ -106,9 +104,7 @@ valueAnimator.start();
         animatorSet1.play(rotationX1).before(translationX2);
         animatorSet1.play(translationX2).with(alpha2);
         animatorSet1.start();
-</code></pre></li>
-</ul>
-<p>透明度变化动画1：从完全不透明到0.2<br><br>透明度变化动画2：从0.2到透明再到完全不透明<br><br>平移动画1：将坐标从现在位置向X正方向偏移300<br><br>平移动画2：回到原来位置<br><br>旋转动画：将View旋转360°<br></p>
+</code></pre><p>透明度变化动画1：从完全不透明到0.2<br><br>透明度变化动画2：从0.2到透明再到完全不透明<br><br>平移动画1：将坐标从现在位置向X正方向偏移300<br><br>平移动画2：回到原来位置<br><br>旋转动画：将View旋转360°<br></p>
 <p>alpha1–&gt;rotationX1、translationX1–&gt;translationX2、alpha2</p>
 <p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fd7a4plej1g307i0boaz9.gif" alt=""></p>
 <h3 id="使用xml文件创建属性动画"><a href="#使用xml文件创建属性动画" class="headerlink" title="使用xml文件创建属性动画"></a>使用xml文件创建属性动画</h3><pre><code>&lt;animator xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;  
