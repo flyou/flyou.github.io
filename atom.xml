@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2017-04-06T05:26:53.474Z</updated>
+  <updated>2017-04-06T05:34:56.510Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>&#39;关于RxJava背压&#39;</title>
+    <title>关于RxJava背压</title>
     <link href="http://flyou.ren/2017/04/05/%E5%85%B3%E4%BA%8ERxJava%E8%83%8C%E5%8E%8B/"/>
     <id>http://flyou.ren/2017/04/05/关于RxJava背压/</id>
     <published>2017-04-05T10:42:14.000Z</published>
-    <updated>2017-04-06T05:26:53.474Z</updated>
+    <updated>2017-04-06T05:34:56.510Z</updated>
     
     <content type="html"><![CDATA[<h2 id="关于RxJava背压"><a href="#关于RxJava背压" class="headerlink" title="关于RxJava背压"></a>关于RxJava背压</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>适用人群：</p>
 <p>了解RXJava1.0、RxJava2.0基本用法，了解RxJava的一些常用操作符的小伙伴</p>
@@ -35,7 +35,7 @@
 <p>学习RxJava2.0用法，熟悉背压机制（我差点信了自己）</p>
 <p><strong>能讲好吗：</strong></p>
 <p>被闹，又不是开车，这我哪知道啊！<br><br></p>
-<p><em>好吧不扯了，开车吧，不不，是开始学习下背压</em><br><br><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecw2xtjdxj309t064aa1.jpg" alt=""></p>
+<p><em>好吧不扯了，开车吧，不不，是开始学习下背压</em><br><br><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecw2xtjdxj309t064aa1.jpg" alt=""><br><br><br><br></p>
 <h3 id="什么是背压"><a href="#什么是背压" class="headerlink" title="什么是背压"></a>什么是背压</h3><p>在RXJava2.0出来以后，就有很多人提’背压’这个东西，看了很多篇文章（其实都是一篇）依旧在云上下不来，到底什么是’背压’呢？</p>
 <p>Google上搜索结果如下：</p>
 <p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febtjc1zzlj30ia04p0so.jpg" alt=""></p>
@@ -57,8 +57,7 @@
 <pre><code> public final &lt;B&gt; Observable&lt;List&lt;T&gt;&gt; buffer(Observable&lt;B&gt; boundary) {
     return buffer(boundary, 16);
 }
-</code></pre><p>那么我们举个栗子，来验证下：</p>
-<p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febv7abqrkj303s050jr8.jpg" alt=""></p>
+</code></pre><p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecwg02xrhj308c08cdfx.jpg" alt=""></p>
 <pre><code>Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() {
       @Override
       public void call(Subscriber&lt;? super Integer&gt; subscriber) {
@@ -349,10 +348,10 @@ public void onSubscribe(Subscription s) {
 <p>那么，我们设置个2试试？</p>
 <pre><code>s.request(2);
 </code></pre><p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecvgzr8hwj30h203owex.jpg" alt=""></p>
-<h5>也就是说我们下游告诉上游我们能处理2个事件，这样上游就缓存池中取出了2个事件给发送给了下游。<br><br>这点相比Rxjava1.0可以说是智能了很多，并不会一股脑的抛给下游而是又下游来主动拉取事件。</h5>
-
-
-<h4 id="ERROR"><a href="#ERROR" class="headerlink" title="ERROR"></a>ERROR</h4><p>Flowable既然可以跑了，那么咱们就来试试背压吧，我们还是采用BackpressureStrategy.ERROR这个策略，如果下游处理不过来就抛出异常。</p>
+<p><strong>也就是说我们下游告诉上游我们能处理2个事件，这样上游就缓存池中取出了2个事件给发送给了下游。这点相比Rxjava1.0可以说是智能了很多，并不会一股脑的抛给下游而是又下游来主动拉取事件。</strong></p>
+<p><br><br><br></p>
+<h4 id="ERROR"><a href="#ERROR" class="headerlink" title="ERROR"></a>ERROR</h4><p><br></p>
+<p>Flowable既然可以跑了，那么咱们就来试试背压吧，我们还是采用BackpressureStrategy.ERROR这个策略，如果下游处理不过来就抛出异常。</p>
 <pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
         @Override
         public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
@@ -391,7 +390,7 @@ public void onSubscribe(Subscription s) {
 <p>现在我们把128改成129，怎么就异常了呢？<br><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecs1pjvg9j311r06umy7.jpg" alt=""></p>
 <p>好吧，还是看源码吧</p>
 <p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1fecs5g0z11j30im04dglo.jpg" alt=""></p>
-<p>纳尼，原来Flowable的缓存池的最大大小是128吧，如果缓存池里有超过128个事件就会抛出异常，提示你去处理这些事件。</p>
+<p>纳尼，原来Flowable的缓存池的最大大小是128吧，如果缓存池里有超过128个事件就会抛出异常，提示你去处理这些事件。<br><br><br><br></p>
 <h4 id="MISSING"><a href="#MISSING" class="headerlink" title="MISSING"></a>MISSING</h4><p>那么，<strong>MISSING</strong>和ERROR有什么区别呢？</p>
 <p> 我们把缓存策略设置为BackpressureStrategy.MISSING试一下</p>
 <pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
@@ -435,7 +434,7 @@ public void onSubscribe(Subscription s) {
 * Downstream has to deal with any overflow.
 * &lt;p&gt;Useful when one applies one of the custom-parameter onBackpressureXXX operators.
 */
-</code></pre><p>也就是说，这种策略是不丢弃，不缓存的策略，那么我要你也没什么用啊…………</p>
+</code></pre><p>也就是说，这种策略是不丢弃，不缓存的策略，那么我要你也没什么用啊…………<br><br><br><br></p>
 <p><strong>BUFFER</strong></p>
 <p>BUFFER是一个无限大的缓存池，也就是说我们可以往里面存储无限多的事件</p>
 <pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
@@ -473,6 +472,7 @@ public void onSubscribe(Subscription s) {
            });
 </code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fecsyf5izmj30lz06lab1.jpg" alt=""></p>
 <p>但是，如果我们发送无数多的事件，同样要注意内存情况。</p>
+<p><br><br><br></p>
 <h4 id="DROP和LATEST"><a href="#DROP和LATEST" class="headerlink" title="DROP和LATEST"></a>DROP和LATEST</h4><p><strong>首先我们看下Drop</strong></p>
 <pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
         @Override
@@ -564,6 +564,7 @@ public void onSubscribe(Subscription s) {
 </code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fecv5vm821g30hg0b414j.gif" alt=""></p>
 <p>看最后的结果</p>
 <p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecv5en5goj30hk09pjt2.jpg" alt=""></p>
+<p><br><br><br></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p> 你以为我会老老实实给你写总结？<br></p>
 <p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecqi5oc27j308c08cq3f.jpg" alt=""></p>
 <blockquote>
