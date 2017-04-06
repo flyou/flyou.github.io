@@ -4,6 +4,560 @@
   
     
     <entry>
+      <title><![CDATA['关于RxJava背压']]></title>
+      <url>http://flyou.ren/2017/04/05/%E5%85%B3%E4%BA%8ERxJava%E8%83%8C%E5%8E%8B/</url>
+      <content type="html"><![CDATA[<h2 id="关于RxJava背压"><a href="#关于RxJava背压" class="headerlink" title="关于RxJava背压"></a>关于RxJava背压</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>适用人群：</p>
+<p>了解RXJava1.0、RxJava2.0基本用法，了解RxJava的一些常用操作符的小伙伴</p>
+<p><strong>讲些什么：</strong></p>
+<ol>
+<li>了解背压是什么？</li>
+<li>了解阻塞形成的原因</li>
+<li>怎么去解决阻塞</li>
+<li>RxJava对背压的处理</li>
+</ol>
+<p><strong>为什么讲：</strong></p>
+<p>学习RxJava2.0用法，熟悉背压机制（我差点信了自己）</p>
+<p><strong>能讲好吗：</strong></p>
+<p>被闹，又不是开车，这我哪知道啊！<br><br></p>
+<p><em>好吧不扯了，开车吧，不不，是开始学习下背压</em><br><br><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecw2xtjdxj309t064aa1.jpg" alt=""></p>
+<h3 id="什么是背压"><a href="#什么是背压" class="headerlink" title="什么是背压"></a>什么是背压</h3><p>在RXJava2.0出来以后，就有很多人提’背压’这个东西，看了很多篇文章（其实都是一篇）依旧在云上下不来，到底什么是’背压’呢？</p>
+<p>Google上搜索结果如下：</p>
+<p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febtjc1zzlj30ia04p0so.jpg" alt=""></p>
+<p>我的第一反应完全是懵逼的，你在说啥？到底想说啥？</p>
+<p>其实仔细想想在RxJava中大概是这个意思，</p>
+<blockquote>
+<p>被观察者发送消息太快以至于它的操作符或者订阅者不能及时处理相关的消息，从而操作消息的阻塞现象。</p>
+</blockquote>
+<p>或者这样理解：</p>
+<blockquote>
+<p>水坝在储水的过程中同样也向下游放水来保持坝内的水位，但是如果发大洪水，上游水量很大，而大坝处理能力有限，坝内的水位必定会上升甚至最终漫过大坝。</p>
+</blockquote>
+<p>在RxJava中，阻塞不一定会出现异常，但是肯定会多少对系统的性能和功能造成一定的影响。</p>
+<hr>
+
+<h3 id="阻塞是怎么形成的？"><a href="#阻塞是怎么形成的？" class="headerlink" title="阻塞是怎么形成的？"></a>阻塞是怎么形成的？</h3><p>正如上面所说的当下游不能快速处理上游发来的事件事件时，而造成的事件阻塞现象。</p>
+<h4 id="RxJava1-0"><a href="#RxJava1-0" class="headerlink" title="RxJava1.0"></a>RxJava1.0</h4><p>在<strong>RxJava1.0</strong>中，Observable是支持背压的，翻下源码，可以看到在Rxjava1.0中的Buffer的大小为16</p>
+<p><strong>Observable.java 3551行</strong></p>
+<pre><code> public final &lt;B&gt; Observable&lt;List&lt;T&gt;&gt; buffer(Observable&lt;B&gt; boundary) {
+    return buffer(boundary, 16);
+}
+</code></pre><p>那么我们举个栗子，来验证下：</p>
+<p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febv7abqrkj303s050jr8.jpg" alt=""></p>
+<pre><code>Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() {
+      @Override
+      public void call(Subscriber&lt;? super Integer&gt; subscriber) {
+          for (int i = 0;; i++) {   //无限循环发事件
+              subscriber.onNext(i);
+          }
+      }
+  }).subscribe(new Action1&lt;Integer&gt;() {
+              @Override
+              public void call(Integer integer) {
+                  Log.d(TAG, &quot;&quot; + integer);
+              }
+          });
+</code></pre><p>效果如下：</p>
+<p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1febvgxq6wlg30g107ye81.gif" alt=""></p>
+<p>由于缓存池buffer的大小为16，照理说程序运行肯定会抛出个我们熟悉的异常<br><strong>MissingBackpressureException</strong>啊，但是结果却是令我们万分诧异，我的内存啊……。</p>
+<p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1febtmay5u8j308c08c744.jpg" alt=""></p>
+<p><em>其实，原因很简单，由于RxJava观察者线程和被观察者处于同一线程，在同一个线程中，被观察需要等待观察者将事件处理完毕后才会继续发送下面的事件，所以上面才会出现这样的情况。</em></p>
+<p>那么，我们让他们处于不同的线程再试下</p>
+<pre><code>   Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(ObservableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0; ; i++) {   //无限循环发事件
+            emitter.onNext(i);
+        }
+    }
+}).subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(new Consumer&lt;Integer&gt;() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+
+                Log.d(TAG, &quot;&quot; + integer);
+            }
+        });
+</code></pre><p>你要的MissingBackpressureException拿去不谢。</p>
+<p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1febvrmp8xbj30lj022dfv.jpg" alt=""></p>
+<p>什么？你不信Rxjava1.0中的Buffer大小是16？你不信算了……<br>开玩笑，我是一个不以理服人的人吗？很显然，是的！</p>
+<p>继续吃上面的大栗子：</p>
+<pre><code>Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() {
+       @Override
+       public void call(Subscriber&lt;? super Integer&gt; subscriber) {
+           for (int i = 0;i&lt;16; i++) {   //短时间，发送16个事件
+               subscriber.onNext(i);
+           }
+       }
+   }).subscribeOn(Schedulers.io())
+           .observeOn(AndroidSchedulers.mainThread())
+           .subscribe(new Action1&lt;Integer&gt;() {
+               @Override
+               public void call(Integer integer) {
+                   Log.d(TAG, &quot;&quot; + integer);
+               }
+           });
+</code></pre><p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febw0neukvj30ga09qgn1.jpg" alt=""></p>
+<p><em>看看这是啥？这不就是下游对上游事件的相应吗?请注意，这次我们仅仅发送了16个事件，下游就能正常处理事件了，但是如果我们把循环值改成17，我们再来看看。</em></p>
+<pre><code>Observable.create(new Observable.OnSubscribe&lt;Integer&gt;() {
+      @Override
+      public void call(Subscriber&lt;? super Integer&gt; subscriber) {
+          for (int i = 0;i&lt;17; i++) {//短时间，发送17个事件
+              subscriber.onNext(i);
+          }
+      }
+  }).subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Action1&lt;Integer&gt;() {
+              @Override
+              public void call(Integer integer) {
+                  Log.d(TAG, &quot;&quot; + integer);
+              }
+          });
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1febw4xxufkj30k703et8z.jpg" alt=""></p>
+<p>没错，没给你闹着玩，他真的又抛出大家喜欢的异常了，没毛病。</p>
+<p>不知道，大家看完了RxJava1.0的背压，对它有什么看法？下面是我对RxJava1.0背压的一些理解</p>
+<ol>
+<li>首先，RxJava1.0的背压事件缓存池很小，只有16，不能够处理较大量的并发事件。</li>
+<li>Rxjava1.0 中上游（被观察者）无法得知下游（观察者）对事件的处理能力和事件处理进度，只能把事件一股脑的抛给下游。</li>
+<li>Rxjava1.0有很多事件不被能正确的背压，从而抛出MissingBackpressureException</li>
+</ol>
+<hr>
+
+<h4 id="RxJava2-0"><a href="#RxJava2-0" class="headerlink" title="RxJava2.0"></a>RxJava2.0</h4><p>RXJava2.0中Observable不再支持背压，多出了Flowable来支持背压操作</p>
+<p>既然说Observable不再支持背压，那么我们随便搞应该就不会报哪个MissingBackpressureException了吧？</p>
+<pre><code>  Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(ObservableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0; ; i++) {   //无限循环发事件
+            emitter.onNext(i);
+        }
+    }
+}).subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(new Consumer&lt;Integer&gt;() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+
+                Log.d(TAG, &quot;&quot; + integer);
+            }
+        });
+</code></pre><p>上面的例子中我们创建了一个Observable（被观察者/上游）来发送无限循环的事件，观察者（下游）让下游来处理事件。</p>
+<p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1febuo82kfwg30bh06h43w.gif" alt=""></p>
+<p>虽然说，不报异常了但是这内存也是看的我眼疼，崩溃也是正常现象啊，这么看来背压操作还是很有必要的啊，不然程序分分钟崩溃一次，怪我咯^&amp;</p>
+<h3 id="如何解决阻塞"><a href="#如何解决阻塞" class="headerlink" title="如何解决阻塞"></a>如何解决阻塞</h3><p><em>当然，提到如何解决阻塞问题吗，大家肯定会首先想到“背压”啊，好吧背压策略确实很神奇，但是它也不是万能的啊，你不了解也不能乱用啊，它也是哥，不要太迷信它</em></p>
+<p>在上面的例子里，就上一个，不是其他的！在上面的例子里我们再RxJava2.0中是使用Observable一直发送死循环事件，由于下游没有任何<strong>背压策略</strong>，所以上游的每个事件，下游都要一一进行处理，所以程序的内存就一直开车，最后翻车也再说难免。</p>
+<blockquote>
+<p>确实，是因为上游在短时间发送太多的事件，让下游来不及处理就造成了事件的阻塞，那么我们是否可以用一些自己的方法来解决这种阻塞呢？</p>
+<p>使用背压啊！<br><br>“你妹的，说好的用自己的办法呢？”</p>
+</blockquote>
+<p>首先，我们分析阻塞形成的原因，无非是因为下面的原因啊：</p>
+<ol>
+<li>上游的水流过快（上游发送事件过快）</li>
+<li>上游水流量过大（上游发送事件过多）</li>
+</ol>
+<p>总结来说就是短时间发送的事件过多，下游忙不过来！</p>
+<p><strong>好吧，首先我们用第一种办法试下，让上游发送事件的速度慢点</strong></p>
+<pre><code>   //控制发送速度，减少内存消耗
+
+Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(ObservableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0; ; i++) {   //无限循环发事件
+            emitter.onNext(i);
+            Thread.sleep(1000);
+        }
+    }
+}).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer&lt;Integer&gt;() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+
+                Log.d(TAG, &quot;&quot; + integer);
+            }
+        });
+</code></pre><p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1febxaks9scg30a7071wgk.gif" alt=""></p>
+<p>这样来看，我的内存就稳定，老铁稳。</p>
+<p><strong>那么，试试第二种方法，下游少接收点事件</strong></p>
+<pre><code>//定时取样
+Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(ObservableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0; ; i++) {   //无限循环发事件
+            emitter.onNext(i);
+
+        }
+    }
+}).sample(1, TimeUnit.SECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer&lt;Integer&gt;() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+
+                Log.d(TAG, &quot;&quot; + integer);
+            }
+        });
+</code></pre><p>或者是用过滤操作符，过滤掉一些上游事件</p>
+<pre><code>    //过滤器 过滤操作
+Observable.create(new ObservableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(ObservableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0; ; i++) {   //无限循环发事件
+            emitter.onNext(i);
+
+        }
+    }
+}).filter(new Predicate&lt;Integer&gt;() {
+    @Override
+    public boolean test(Integer integer) throws Exception {
+        return integer % 100 == 0;
+
+    }
+})
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer&lt;Integer&gt;() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+
+                Log.d(TAG, &quot;&quot; + integer);
+            }
+        });
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1febxkcasihg309t073aba.gif" alt=""><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1febxkk422gg309t073abb.gif" alt=""></p>
+<hr>
+
+<h2 id="背压策略"><a href="#背压策略" class="headerlink" title="背压策略"></a>背压策略</h2><p>上面唠唠叨叨说了那么多，基本上也给大家阐明了阻塞形成的原因和解决阻塞的方法，基本策略就是减少发送事件的频率和减少发送事件的数量。<br><br>But……<br><br><br>我们手动让上游发送事件的速度满下来貌似是不可取的，你想让上游的速度十多快呢？上游需要等多久呢？<br><br>还有……<br><br><br>我们依旧无法知道下游处理事件的能力，无法很好地处理阻塞的事件。<br><br>当然，你们肯定会说RxJava2.0不是很好地支了背压了吗？是的，确实比较好地对阻塞做了处理，咱们来看下吧。</p>
+<p>在RxJava2.0中官方，推出了Flowable 和Subscriber用来支持背压，同样的去除了Observable对背压的支持，对的就像你上面看到的，Observable不再支持背压了，即使阻塞崩溃也不会抛出MissingBackpressureException</p>
+<p>还是上代码看看，Flowable的用法吧。</p>
+<pre><code>Flowable.create(FlowableOnSubscribe&lt;T&gt; source, BackpressureStrategy mode)
+</code></pre><p>创建Flowable会默认让传入一个FlowableOnSubscribe和一个BackpressureStrategy，FlowableOnSubscribe很好理解就是一个就是Flowable的一个被观察者源，而BackpressureStrategy就是Flowable提供的背压策略</p>
+<p>有哪些策略还是上源码看下吧：</p>
+<pre><code>public enum BackpressureStrategy {
+/**
+ * OnNext events are written without any buffering or dropping.
+ * Downstream has to deal with any overflow.
+ * &lt;p&gt;Useful when one applies one of the custom-parameter onBackpressureXXX operators.
+ */
+MISSING,
+/**
+ * Signals a MissingBackpressureException in case the downstream can&apos;t keep up.
+ */
+ERROR,
+/**
+ * Buffers &lt;em&gt;all&lt;/em&gt; onNext values until the downstream consumes it.
+ */
+BUFFER,
+/**
+ * Drops the most recent onNext value if the downstream can&apos;t keep up.
+ */
+DROP,
+/**
+ * Keeps only the latest onNext value, overwriting any previous value if the
+ * downstream can&apos;t keep up.
+ */
+LATEST
+}
+</code></pre><p><strong>MISSING：</strong><br>如果流的速度无法保持同步，可能会抛出MissingBackpressureException或IllegalStateException。</p>
+<p><strong>BUFFER</strong><br>上游不断的发出onNext请求，直到下游处理完，也就是和Observable一样了，缓存池无限大，最后直到程序崩溃</p>
+<p><strong>ERROR</strong><br>会在下游跟不上速度时抛出MissingBackpressureException。</p>
+<p><strong>DROP</strong><br>会在下游跟不上速度时把onNext的值丢弃。</p>
+<p><strong>LATEST</strong><br>会一直保留最新的onNext的值，直到被下游消费掉。</p>
+<p><hr><br>先不看上面的策略，我们最起码先看看Flowable怎么用吧</p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+     @Override
+     public void subscribe(FlowableEmitter&lt;Integer&gt; e) throws Exception {
+         Log.d(TAG, &quot;emit 1&quot;);
+         emitter.onNext(1);
+         Log.d(TAG, &quot;emit 2&quot;);
+         emitter.onNext(2);
+         Log.d(TAG, &quot;emit 3&quot;);
+         emitter.onNext(3);
+         Log.d(TAG, &quot;emit complete&quot;);
+         emitter.onComplete();
+
+     }
+ }, BackpressureStrategy.ERROR).subscribeOn(Schedulers.io())
+         .observeOn(AndroidSchedulers.mainThread())
+         .subscribe(new Subscriber&lt;Integer&gt;() {
+             @Override
+             public void onSubscribe(Subscription s) {
+
+             }
+
+             @Override
+             public void onNext(Integer s) {
+             Log.d(TAG, &quot;onNext: &quot; + integer);
+             }
+
+             @Override
+             public void onError(Throwable t) {
+             Log.d(TAG, &quot;onError&quot;+t);
+
+             }
+
+             @Override
+             public void onComplete() {   
+             Log.d(TAG, &quot;onComplete&quot;);
+
+             }
+         });
+</code></pre><p>上游 Flowable 构建FlowableEmitter用来发送上游事件，这里的背压策略我们采用ERROR，下游方法中出现了一个和原来</p>
+<pre><code>@Override
+public void onSubscribe(Subscription s) {
+
+               }
+</code></pre><p><strong>Subscription.java</strong></p>
+<pre><code>public interface Subscription {
+
+public void request(long n);
+
+public void cancel();
+
+}
+</code></pre><p>这里需要重点说明一下，在Flowable中背压采取拉取响应的方式来进行水流控制，也就是说Subscription是控制上下游水流的主要方式，一般的，我们需要调用Subscription.request（）来传入一个下游<strong>目前</strong>能处理的事件的数量</p>
+<p>那么，我们不传会怎么样？</p>
+<p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecr4rx0gbj30h702hjrl.jpg" alt=""></p>
+<p><strong>备注：这里上下游是在不同的线程里进行的，如果在同一个线程里，它也会抛出一个MissingBackpressureException，让你去设置 调用request（）方法</strong></p>
+<p>咦，我上游发送的事件，下游一个没收到啊</p>
+<p>那么也就是说上游不能发射事件，是因为你没有调用request方法，因为你不调用request（）上游不知道下游能处理事件的能力啊。</p>
+<p>那么，也就是说我必须要调用request方法咯，那么我们就调用一下喽，官方说默认推荐使用Long.MAX_VALUE。</p>
+<p>好吧，那么我们来试下吧，加上如下代码。</p>
+<pre><code>@Override
+public void onSubscribe(Subscription s) {
+           s.request(Long.MAX_VALUE);  //下游处理事件能力值
+               }
+</code></pre><p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1fecqnmh9j4j30gt04ugma.jpg" alt=""></p>
+<p>咦，还真正常了啊。</p>
+<p>那么，我们设置个2试试？</p>
+<pre><code>s.request(2);
+</code></pre><p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecvgzr8hwj30h203owex.jpg" alt=""></p>
+<h5>也就是说我们下游告诉上游我们能处理2个事件，这样上游就缓存池中取出了2个事件给发送给了下游。<br><br>这点相比Rxjava1.0可以说是智能了很多，并不会一股脑的抛给下游而是又下游来主动拉取事件。</h5>
+
+
+<h4 id="ERROR"><a href="#ERROR" class="headerlink" title="ERROR"></a>ERROR</h4><p>Flowable既然可以跑了，那么咱们就来试试背压吧，我们还是采用BackpressureStrategy.ERROR这个策略，如果下游处理不过来就抛出异常。</p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+        @Override
+        public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
+            for (int i = 0;i&lt; 128; i++) {
+                Log.d(TAG, &quot;emit &quot; + i);
+                emitter.onNext(i);
+            }
+        }
+    }, BackpressureStrategy.ERROR).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber&lt;Integer&gt;() {
+
+                @Override
+                public void onSubscribe(Subscription s) {
+                    Log.d(TAG, &quot;onSubscribe&quot;);
+
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    Log.d(TAG, &quot;onNext: &quot; + integer);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Log.w(TAG, &quot;onError: &quot;, t);
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, &quot;onComplete&quot;);
+                }
+            });
+</code></pre><p>我们，首先让上游发送128个事件，下游不做处理，恩好吧是正常的</p>
+<p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fecs2vpr70j30j805g0th.jpg" alt=""></p>
+<p>现在我们把128改成129，怎么就异常了呢？<br><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecs1pjvg9j311r06umy7.jpg" alt=""></p>
+<p>好吧，还是看源码吧</p>
+<p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1fecs5g0z11j30im04dglo.jpg" alt=""></p>
+<p>纳尼，原来Flowable的缓存池的最大大小是128吧，如果缓存池里有超过128个事件就会抛出异常，提示你去处理这些事件。</p>
+<h4 id="MISSING"><a href="#MISSING" class="headerlink" title="MISSING"></a>MISSING</h4><p>那么，<strong>MISSING</strong>和ERROR有什么区别呢？</p>
+<p> 我们把缓存策略设置为BackpressureStrategy.MISSING试一下</p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+    @Override
+    public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
+        for (int i = 0;i&lt; 129; i++) {
+            Log.d(TAG, &quot;emit &quot; + i);
+            emitter.onNext(i);
+        }
+    }
+}, BackpressureStrategy.MISSING).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Subscriber&lt;Integer&gt;() {
+
+            @Override
+            public void onSubscribe(Subscription s) {
+                Log.d(TAG, &quot;onSubscribe&quot;);
+                subscription = s;
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                Log.d(TAG, &quot;onNext: &quot; + integer);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.w(TAG, &quot;onError: &quot;, t);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, &quot;onComplete&quot;);
+            }
+        });
+</code></pre><p><img src="http://ww4.sinaimg.cn/large/0060lm7Tgy1fecscuntdlj30zz04bwf1.jpg" alt=""><br>结构还是一样的，不过这次很友好的提示你队列满了</p>
+<pre><code>io.reactivex.exceptions.MissingBackpressureException: Queue is full?!
+</code></pre><p>下面是MISSING策略的备注：</p>
+<pre><code>/**
+* OnNext events are written without any buffering or dropping.
+* Downstream has to deal with any overflow.
+* &lt;p&gt;Useful when one applies one of the custom-parameter onBackpressureXXX operators.
+*/
+</code></pre><p>也就是说，这种策略是不丢弃，不缓存的策略，那么我要你也没什么用啊…………</p>
+<p><strong>BUFFER</strong></p>
+<p>BUFFER是一个无限大的缓存池，也就是说我们可以往里面存储无限多的事件</p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+       @Override
+       public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
+           for (int i = 0;i&lt;129 ; i++) {
+               Log.d(TAG, &quot;emit &quot; + i);
+               emitter.onNext(i);
+           }
+       }
+   }, BackpressureStrategy.BUFFER).subscribeOn(Schedulers.io())
+           .observeOn(AndroidSchedulers.mainThread())
+           .subscribe(new Subscriber&lt;Integer&gt;() {
+
+               @Override
+               public void onSubscribe(Subscription s) {
+                   Log.d(TAG, &quot;onSubscribe&quot;);
+
+               }
+
+               @Override
+               public void onNext(Integer integer) {
+                   Log.d(TAG, &quot;onNext: &quot; + integer);
+               }
+
+               @Override
+               public void onError(Throwable t) {
+                   Log.w(TAG, &quot;onError: &quot;, t);
+               }
+
+               @Override
+               public void onComplete() {
+                   Log.d(TAG, &quot;onComplete&quot;);
+               }
+           });
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fecsyf5izmj30lz06lab1.jpg" alt=""></p>
+<p>但是，如果我们发送无数多的事件，同样要注意内存情况。</p>
+<h4 id="DROP和LATEST"><a href="#DROP和LATEST" class="headerlink" title="DROP和LATEST"></a>DROP和LATEST</h4><p><strong>首先我们看下Drop</strong></p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+        @Override
+        public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
+            Log.d(TAG, &quot;requested: &quot; + emitter.requested());
+            for (int i = 0; ; i++) {
+                emitter.onNext(i);
+
+            }
+        }
+    }, BackpressureStrategy.DROP).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber&lt;Integer&gt;() {
+
+                @Override
+                public void onSubscribe(Subscription s) {
+                    Log.d(TAG, &quot;onSubscribe&quot;);
+                    subscription = s;
+
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    Log.d(TAG, &quot;onNext: &quot; + integer);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Log.w(TAG, &quot;onError: &quot;, t);
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, &quot;onComplete&quot;);
+                }
+            });
+</code></pre><p>我们把对象subscription放到外面，在外面调用request方法（让事件往下面传递，上面说过！！！），看下输出情况。<br>每次点击界面上的按钮触发下面的操作。</p>
+<p><strong>假装有按钮</strong></p>
+<pre><code>subscription.request(64);
+</code></pre><p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fectnf48hbg30hg0b4tl6.gif" alt=""></p>
+<p>可以看到，刚进入时打印了当前的request大小，默认为缓存池的大小128.</p>
+<p>当我们点击按钮触发subscription.request(64)时，它会从缓存池中取出64个事件发送给下游，当我们呢再次点击，它又取出了64条。但是，当我们第三次点击按钮时，看到了上面令我们诧异的结果。为什么呢？</p>
+<blockquote>
+<p>FLowable内部的默认的水缸大小为128, 因此, 它刚开始肯定会把0-127这128个事件保存起来, 然后丢弃掉其余的事件, 当我们request(64)的时候,下游便会处理掉这64个事件，当第二次请求时把水缸里剩余的64个事件清空, 那么上游水缸中又会重新装进新的128个事件。</p>
+</blockquote>
+<p>也就是说，我先存128个，当这128个被清空后从新再装进128吧，那么中间这个过程中上游发送的事件，下游就给全部丢掉了。</p>
+<p><strong>再来看下LATEST</strong></p>
+<p>其实，LATEST和DROP很像都是存不下可就不存，丢事件呗，但是LATEST存储的是最后发送的事件。</p>
+<pre><code>Flowable.create(new FlowableOnSubscribe&lt;Integer&gt;() {
+      @Override
+      public void subscribe(FlowableEmitter&lt;Integer&gt; emitter) throws Exception {
+          Log.d(TAG, &quot;requested: &quot; + emitter.requested());
+          for (int i = 0;i&lt;1000 ; i++) {
+              emitter.onNext(i);
+
+          }
+      }
+  }, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Subscriber&lt;Integer&gt;() {
+
+              @Override
+              public void onSubscribe(Subscription s) {
+                  Log.d(TAG, &quot;onSubscribe&quot;);
+                  subscription = s;
+
+              }
+
+              @Override
+              public void onNext(Integer integer) {
+                  Log.d(TAG, &quot;onNext: &quot; + integer);
+              }
+
+              @Override
+              public void onError(Throwable t) {
+                  Log.w(TAG, &quot;onError: &quot;, t);
+              }
+
+              @Override
+              public void onComplete() {
+                  Log.d(TAG, &quot;onComplete&quot;);
+              }
+          });
+</code></pre><p>仅仅把策略改成了LATEST,把事件循环设成了1000（因为不设置成固定值，将无法比较和Drop的区别），因为它只保存最后发送的事件</p>
+<p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecue99ifcg30hg0b4dk0.gif" alt=""></p>
+<p>可以看到，它把最后发送的999给存储了下来，至于为什么第三次点击按钮只打印了一个，其实也很简单，由于其他事件早已经发送出去了，事件发送的事件完成的比较快，也就是说当我们第三点击按钮的时候上游的发送事件都已经完成了，所以系统就给我们了最后发送的事件，如果当我们点击按钮的时候事件还没有发送完成，那么他会把正在发送的127个事件和最后的事件发送给下游。</p>
+<p>什么？你又不信?<br>在发送的for循环里添加一个延时</p>
+<pre><code>Thread.sleep(10);
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0060lm7Tgy1fecv5vm821g30hg0b414j.gif" alt=""></p>
+<p>看最后的结果</p>
+<p><img src="http://ww2.sinaimg.cn/large/0060lm7Tgy1fecv5en5goj30hk09pjt2.jpg" alt=""></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p> 你以为我会老老实实给你写总结？<br></p>
+<p><img src="http://ww1.sinaimg.cn/large/0060lm7Tgy1fecqi5oc27j308c08cq3f.jpg" alt=""></p>
+<blockquote>
+<p>首先我们需要明白阻塞形成的原因，再想办法和解决阻塞。其实从RxJava2.0背压的策略来看真的比RxJava1.0提升了很多，但是真的没有我们想象的那么完美，因为毕竟丢失的事件不一定使我们想要丢失事件，背压不一定就是你的救命稻草，所以正如上面所演示的根据自己的实际需求制定自己的防阻塞策略很关键。</p>
+</blockquote>
+<p><br><br><br><br><br><br><br><br><br><br><br><br>是的，我写了,我老老实实写的！</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[属性动画入门实践]]></title>
       <url>http://flyou.ren/2017/03/02/%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB%E5%85%A5%E9%97%A8%E5%AE%9E%E8%B7%B5/</url>
       <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>说道动画肯定要先介绍一下，逐帧动画(frame-by-frame animation)和补间动画(tweened animation)。<br>逐帧动画和补间动画是Android出生时就具有的动画。所谓的补间动画就是一个视图上在指定的时间和时间长度下显示某张图片，一般用于加载动画或者做一些简单的展示。<br><br>所谓的补间动画也很简单，学习过flash的读者肯定会很熟悉此类动画，因为它基本和flash的动画模式是一样的，可以对一个元素或者视图做透明度、缩放、平移、旋转动画，当然你也可以把四类组合起来使用完成比较炫酷的效果<br></p>
