@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://flyou.ren/"/>
-  <updated>2017-06-15T08:10:37.581Z</updated>
+  <updated>2017-07-17T12:47:35.004Z</updated>
   <id>http://flyou.ren/</id>
   
   <author>
@@ -16,25 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>&#39;Android打包签名流程&#39;</title>
-    <link href="http://flyou.ren/2017/06/15/Android%E6%89%93%E5%8C%85%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B/"/>
-    <id>http://flyou.ren/2017/06/15/Android打包签名流程/</id>
-    <published>2017-06-15T08:10:37.000Z</published>
-    <updated>2017-06-15T08:10:37.581Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>&#39;关于科学上网两三事&#39;</title>
+    <title>关于科学上网两三事</title>
     <link href="http://flyou.ren/2017/06/15/%E5%85%B3%E4%BA%8E%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E4%B8%A4%E4%B8%89%E4%BA%8B/"/>
     <id>http://flyou.ren/2017/06/15/关于科学上网两三事/</id>
     <published>2017-06-15T08:10:37.000Z</published>
-    <updated>2017-07-17T12:40:46.041Z</updated>
+    <updated>2017-07-17T12:47:35.004Z</updated>
     
     <content type="html"><![CDATA[<h2 id="什么是科学上网"><a href="#什么是科学上网" class="headerlink" title="什么是科学上网"></a>什么是科学上网</h2><p>在很久很久以前，我依稀可以记得那时候访问google和Facebook是很流畅的，是因为那时候网络连接的方式是直接连接的</p>
 <p><img src="http://ww2.sinaimg.cn/large/a15b4afegy1fhmzlrunjbj20gf03et8k.jpg" alt=""></p>
@@ -70,6 +56,7 @@
 <p>Shadowsocks 分为服务器端和客户端。在使用之前，需要先将服务器端部署到服务器上面，然后通过客户端连接并建立本地代理。</p>
 <p>其优点是使用自行设计的协议进行加密，常见的加密算法如AES、RC4等，每次数据请求只转发一个连接，因此网速很快，可达到与实际网速相同的传输速度，在移动设备上也更省电方便。</p>
 <p>正是由于其特殊的算法加密，其安全性是相比而言最高的，因此可以享受更高品质的上网体验。</p>
+<p><img src="http://wx1.sinaimg.cn/mw690/a2f7c645ly1fhn5y3kf8rj20j808xq2z.jpg" alt=""></p>
 <p><strong>下面主要介绍下，Shadowsocks的配置方式。</strong></p>
 <h4 id="1、以-Vultr-为例，注册帐户并登录Vultr"><a href="#1、以-Vultr-为例，注册帐户并登录Vultr" class="headerlink" title="1、以 Vultr 为例，注册帐户并登录Vultr"></a>1、以 Vultr 为例，注册帐户并登录<a href="http://www.vultr.com/?ref=7126907" target="_blank" rel="external">Vultr</a></h4><h4 id="第一步：点击创建按钮"><a href="#第一步：点击创建按钮" class="headerlink" title="第一步：点击创建按钮"></a>第一步：点击创建按钮</h4><p><img src="http://wx2.sinaimg.cn/mw690/a2f7c645ly1fhn4vusjbvj211y0asgmi.jpg" alt=""></p>
 <h4 id="第二步：选择数据中心"><a href="#第二步：选择数据中心" class="headerlink" title="第二步：选择数据中心"></a>第二步：选择数据中心</h4><p><img src="http://wx4.sinaimg.cn/mw690/a2f7c645ly1fhn4vv7xl8j211y0dwmyd.jpg" alt=""></p>
@@ -115,7 +102,7 @@ $ firewall-cmd --reload
 <pre><code>$ ssserver -c /etc/shadowsocks.json
 </code></pre><p>如果想干点其他的实现后台运行，使用</p>
 <pre><code>$ nohup ssserver -c /etc/shadowsocks.json &amp;
-</code></pre><h4 id="第十二步："><a href="#第十二步：" class="headerlink" title="第十二步："></a>第十二步：</h4><p>客户端连接，window用户直接下载Shadowsocks，运行软件如下<br><img src="http://c13.eoemarket.net/app0/199/199651/icon/725846_480.png" alt=""><br><img src="http://wx2.sinaimg.cn/mw690/a2f7c645ly1fhn5cdn2lkj20cx0a3jro.jpg" alt=""></p>
+</code></pre><h4 id="第十二步：客户端连接"><a href="#第十二步：客户端连接" class="headerlink" title="第十二步：客户端连接"></a>第十二步：客户端连接</h4><p>window用户直接下载Shadowsocks，运行软件如下<br><img src="http://c13.eoemarket.net/app0/199/199651/icon/725846_480.png" alt=""><br><img src="http://wx2.sinaimg.cn/mw690/a2f7c645ly1fhn5cdn2lkj20cx0a3jro.jpg" alt=""></p>
 <p>按照配置文件里的配置进行配置即可，配置完成后右键启用系统代理即可完成科学上网。<br><img src="http://wx2.sinaimg.cn/mw690/a2f7c645ly1fhn5e5pj12j205u06vdft.jpg" alt=""></p>
 <p>但是，如果你想要浏览区走ss可以直接安装浏览器插件</p>
 <p>switchysharp或者switchyomega等类似软件代理本地即可，<br><img src="http://wx2.sinaimg.cn/mw690/a2f7c645gy1fhn5hu08u1j20j9083glv.jpg" alt=""></p>
@@ -126,6 +113,7 @@ $ firewall-cmd --reload
 <p>备注：</p>
 <p>1、由于ss的流量走的是http代理，所以部分游戏没有办法使用，使用<a href="http://www.proxifier.com/" target="_blank" rel="external">proxifier</a>可以完成你对某些应用的<br>全部代理。</p>
 <p>2、如果，配置完成客户端无法连接服务器，请检查服务端配置和服务器防火墙对Shadowsocks的端口是否开启。</p>
+<p><strong>现在去干想做的事去吧。</strong></p>
 ]]></content>
     
     <summary type="html">
