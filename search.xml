@@ -6,7 +6,10 @@
     <entry>
       <title><![CDATA[关于科学上网两三事]]></title>
       <url>http://flyou.ren/2017/06/15/%E5%85%B3%E4%BA%8E%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E4%B8%A4%E4%B8%89%E4%BA%8B/</url>
-      <content type="html"><![CDATA[<h2 id="什么是科学上网"><a href="#什么是科学上网" class="headerlink" title="什么是科学上网"></a>什么是科学上网</h2><p>在很久很久以前，我依稀可以记得那时候访问google和Facebook是很流畅的，是因为那时候网络连接的方式是直接连接的</p>
+      <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一直以来，我都觉得自由的网络是不应该有限制的。作者也是饱受其扰，也在翻土啬的道路上走了很久。从最开始的修改HOST文件，到使用免费代理软件，到购买vpn服务，再到现在的自己搭梯子。<br></p>
+<p>期间有很多无奈，有频繁修改HOST的烦躁，有第三方软件不稳地的惆怅，更有服务商跑路的愤慨。</p>
+<p>今天写下这篇文章，主要是让大家了解土啬和梯子，在出土啬的路上少走弯路。</p>
+<h2 id="为什么是科学上网"><a href="#为什么是科学上网" class="headerlink" title="为什么是科学上网"></a>为什么是科学上网</h2><p>在很久很久以前，我依稀可以记得那时候访问google和Facebook是很流畅的，是因为那时候网络连接的方式是直接连接的</p>
 <p><img src="http://ww2.sinaimg.cn/large/a15b4afegy1fhmzlrunjbj20gf03et8k.jpg" alt=""></p>
 <p><em>但是为了更好的管理国人的访问页面和一些其他的政治因素，GWF就慢慢出现在了我们直接连接其他网站的中间。</em></p>
 <blockquote>
@@ -50,7 +53,8 @@
 <h4 id="第六步：等待安装完成"><a href="#第六步：等待安装完成" class="headerlink" title="第六步：等待安装完成"></a>第六步：等待安装完成</h4><p><img src="http://wx4.sinaimg.cn/mw690/a2f7c645ly1fhn4vy9hpyj211y0egdh9.jpg" alt=""></p>
 <h4 id="第七步：打开管理菜单，查看登陆名密码"><a href="#第七步：打开管理菜单，查看登陆名密码" class="headerlink" title="第七步：打开管理菜单，查看登陆名密码"></a>第七步：打开管理菜单，查看登陆名密码</h4><p><img src="http://wx1.sinaimg.cn/mw690/a2f7c645ly1fhn4vyqparj211y0fu766.jpg" alt=""></p>
 <h4 id="第八步：登录进入系统"><a href="#第八步：登录进入系统" class="headerlink" title="第八步：登录进入系统"></a>第八步：登录进入系统</h4><p><img src="http://wx2.sinaimg.cn/mw690/a2f7c645ly1fhn4vz8d1rj211x0i2jsi.jpg" alt=""></p>
-<h4 id="第九步：安装服务端"><a href="#第九步：安装服务端" class="headerlink" title="第九步：安装服务端"></a>第九步：安装服务端</h4><pre><code>$ yum install m2crypto python-setuptools
+<h4 id="第九步：安装服务端"><a href="#第九步：安装服务端" class="headerlink" title="第九步：安装服务端"></a>第九步：安装服务端</h4><p><strong>以下Linux服务器操作命令，如有不了解，请自行百度</strong></p>
+<pre><code>$ yum install m2crypto python-setuptools
 $ easy_install pip
 $ pip install shadowsocks
 </code></pre><h4 id="第十步：配置服务器参数"><a href="#第十步：配置服务器参数" class="headerlink" title="第十步：配置服务器参数"></a>第十步：配置服务器参数</h4><pre><code>$ vi  /etc/shadowsocks.json
@@ -65,7 +69,14 @@ $ pip install shadowsocks
 &quot;method&quot;:&quot;aes-256-cfb&quot;,
 &quot;fast_open&quot;: false
 }
-</code></pre><p>原则上shadowsocks是支持多用户同时在线的，但是如果你为了区分访问信息，也可以设置多端口即可</p>
+</code></pre><p>加密方式官方默认使用aes-256-cfb</p>
+<p>server: 服务器IP</p>
+<p>server_port: 服务器防火墙开放端口</p>
+<p>local_port: 客户端本地端端口</p>
+<p>password: 用来加密的密码</p>
+<p>timeout:超时时间（秒）</p>
+<p>method:加密方法，可选择 “bf-cfb”, “aes-256-cfb”, “des-cfb”, “rc4″等</p>
+<p>原则上shadowsocks是支持多用户同时在线的，但是如果你为了区分访问信息，也可以设置多端口即可</p>
 <pre><code>{
 &quot;server&quot;:&quot;0.0.0.0&quot;,
 &quot;local_address&quot;: &quot;127.0.0.1&quot;,
@@ -97,6 +108,8 @@ $ firewall-cmd --reload
 <p>备注：</p>
 <p>1、由于ss的流量走的是http代理，所以部分游戏没有办法使用，使用<a href="http://www.proxifier.com/" target="_blank" rel="external">proxifier</a>可以完成你对某些应用的<br>全部代理。</p>
 <p>2、如果，配置完成客户端无法连接服务器，请检查服务端配置和服务器防火墙对Shadowsocks的端口是否开启。</p>
+<p>文章最后分下个免费SS账号的网站吧，可以做临时使用，不保证稳定性哦。</p>
+<p><a href="http://ss.ishadowx.com/" title="点我免费账号" target="_blank" rel="external">点我免费账号</a></p>
 <p><strong>现在去干想做的事去吧。</strong></p>
 ]]></content>
     </entry>
