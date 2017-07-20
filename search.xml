@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title><![CDATA[关于科学上网两三事--续]]></title>
+      <title><![CDATA[关于科学上网两三事-续]]></title>
       <url>http://flyou.ren/2017/07/20/%E5%85%B3%E4%BA%8E%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E4%B8%A4%E4%B8%89%E4%BA%8B-%E7%BB%AD/</url>
       <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在上篇文章中我们介绍了市面上几种番羽土啬的方式，以及如何搭建一套属于自己SS服务端，但是考虑到多种原因，很多小伙伴应该也不会那么做。</p>
 <p>为啥咧？你们都去打农药了吗？你们都去约会了吗？说的跟你们真的有女朋友似得。</p>
@@ -23,8 +23,8 @@
 <p>开什么玩笑，问题肯定要解决啊。</p>
 <h3 id="唠唠这些问题"><a href="#唠唠这些问题" class="headerlink" title="唠唠这些问题"></a>唠唠这些问题</h3><blockquote>
 <p>上一节我们提到要实现这么一个工具（软件）来获取网站上的账号和密码数据到保存到本地并配置给代理软件。</p>
-<h4 id="1-咦，账号的获取"><a href="#1-咦，账号的获取" class="headerlink" title="1.咦，账号的获取"></a>1.咦，账号的获取</h4></blockquote>
-<p>首先我们说说怎么获取这些账号和密码数据，肯定不能再一次次手动打开这个网站去抄这些数据吧，爬虫在这个时候就显得非常好用了。</p>
+</blockquote>
+<h4 id="1-咦，账号的获取"><a href="#1-咦，账号的获取" class="headerlink" title="1.咦，账号的获取"></a>1.咦，账号的获取</h4><p>首先我们说说怎么获取这些账号和密码数据，肯定不能再一次次手动打开这个网站去抄这些数据吧，爬虫在这个时候就显得非常好用了。</p>
 <p>那么，该用什么来实现这个爬虫呢？</p>
 <p>这里我采用了Jsoup来显示这个爬虫，主要是因为python的定时调度不好用（下面具体说明）</p>
 <p>使用jsoup爬去这个页面的数据和python一样，写起来很简单</p>
@@ -255,7 +255,7 @@ def openExe(self):
 #end while
             print &quot;GoodBye&quot;
 </code></pre><p><strong><a href="https://github.com/flyou/FreeSSClient" target="_blank" rel="external">点我下载源码</a></strong></p>
-<h4 id="5-试一试软件效果"><a href="#5-试一试软件效果" class="headerlink" title="5.试一试软件效果"></a>5.试一试软件效果</h4><p>执行代码，即可完成配置文件的生成和装载</p>
+<h4 id="5-哈-，试一试效果"><a href="#5-哈-，试一试效果" class="headerlink" title="5.哈 ，试一试效果"></a>5.哈 ，试一试效果</h4><p>执行代码，即可完成配置文件的生成和装载</p>
 <p><img src="http://ww4.sinaimg.cn/large/006HJ39wgy1fhqg9otgmyj30fh0a50sv.jpg" alt=""></p>
 <p>此时，Shadowsocks应用就会已经启动（目录下需要有Shadowsocks）并成功加载相应的账号配置，如下图</p>
 <p><img src="http://ww1.sinaimg.cn/large/006HJ39wgy1fhqg9ouwxgj30cx0a3jrj.jpg" alt=""></p>
