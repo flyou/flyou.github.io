@@ -197,14 +197,6 @@
         
 
             <li class="collapse-level-1" collapse-level="1">
-                <a class="no-padding" href="/categories/技术领域/网络/">
-                    网络 <span class="right">2 篇</span></a>
-                </a>
-            </li>
-
-        
-
-            <li class="collapse-level-1" collapse-level="1">
                 <a class="no-padding" href="/categories/技术领域/Android/">
                     Android <span class="right">6 篇</span></a>
                 </a>
@@ -215,6 +207,14 @@
             <li class="collapse-level-1" collapse-level="1">
                 <a class="no-padding" href="/categories/技术领域/android/">
                     android <span class="right">1 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/网络/">
+                    网络 <span class="right">2 篇</span></a>
                 </a>
             </li>
 
@@ -320,7 +320,7 @@
 <p>阅读本文之前，裂墙建议先阅读上述文章</p>
 </blockquote>
 <h2 id="3-ItemDecoration-≠-Split-Line"><a href="#3-ItemDecoration-≠-Split-Line" class="headerlink" title="3 ItemDecoration ≠ Split Line"></a>3 ItemDecoration ≠ Split Line</h2><p>是谁告诉你们Decoration是分割线的意思了？为什么一提到addItemDecoration（）你们就觉得是添加分割线呢？再看看网上的文章也都是分割线，为了科普下Decoration的真是意思我特地的Google了下</p>
-<center><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9ladixjfj30hq06dwen.jpg" alt=""><br></center><br>人家是装饰的意思有没有，并不是单单的分割线那么简单，造吗？这是知识点，知识点！！<br><br><br>好吧，咱们还是去看看官网上的解释吧<br><br><br>&gt; An ItemDecoration allows the application to add a special drawing and layout offset to specific item views from the adapter’s data set. This can be useful for drawing dividers between items, highlights, visual grouping boundaries and more.<br>&gt;<br>ItemDecoration允许应用程序从适配器的数据集中向特定项目视图添加特殊图形和布局偏移量。 这可以用于在项目，高亮度，视觉分组边界等之间绘制分隔符等等。<br><br>### 3.1 ItemDecoration基本流程<br><br>要先绘制自己的装饰器，我们需要了解下ItemDecoration的方法。<br>ItemDecoration包括三个方法。<br><br>&gt; getItemOffsets(Rect outRect, View view, RecyclerView parent, State state)<br><br><br>&gt; onDraw(Canvas c, RecyclerView parent, State state)<br><br><br>&gt; onDrawOver(Canvas c, RecyclerView parent, State state)<br><br><strong>getItemOffsets()</strong><br><br>负责对RecycleView每一个Item上下左右偏移量的测量，什么意思也就是你的每个子View距离上下左右有多少间隔。<br><br><br><strong>onDraw()</strong><br><br>见名知意，就是对你想要装饰的绘制，canvas对象都给你了，你想画什么还不都是你的事？<br><br><strong>onDrawOver()</strong><br><br>与onDraw()类似都是负责装饰的绘制，但是这个方法可以绘制在你ItemView上面，具体什么意思，下面会具体介绍。<br><br><strong>注意</strong><br><br>decoration 的 onDraw，child view 的 onDraw，decoration 的 onDrawOver，这三者是依次发生的<br><br>在 onDraw绘制到 canvas 上，而这个绘制范围可以超出在 getItemOffsets 中设置的范围，但由于 decoration 是绘制在 child view 的底下，所以并不可见，但是会存在 overdraw<br><br>onDrawOver 是绘制在最上层的，所以它的绘制位置并不受限制<br><center><br><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9p0l0f5fj30p00gojrq.jpg" alt=""><br></center><br>正如上文和上图所示，onDraw()的绘制区域是由getItemOffsets测量的结果决定，由于绘制的先后性，RecycleView ItemView 的onDraw方法会覆盖掉getItemOffsets测量以外的区域。由于onDrawOver在最后进行绘制，所以onDrawOver的绘制返回不受限制。<br><br>### 3.2 getItemOffsets()<br><br>首先我们先来具体看下getItemOffsets()，getItemOffsets会让你去决定上下左右的偏移尺寸，如下图所示。<br><center><br><img src="http://ww4.sinaimg.cn/large/0060lm7Tly1fj9o0kragzj30p00gowen.jpg" alt=""><br></center>
+<center><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9ladixjfj30hq06dwen.jpg" alt=""><br></center><br>人家是装饰的意思有没有，并不是单单的分割线那么简单，造吗？这是知识点，知识点！！<br><br><br>好吧，咱们还是去看看官网上的解释吧<br><br><br>&gt; An ItemDecoration allows the application to add a special drawing and layout offset to specific item views from the adapter’s data set. This can be useful for drawing dividers between items, highlights, visual grouping boundaries and more.<br>&gt;<br>ItemDecoration允许应用程序从适配器的数据集中向特定项目视图添加特殊图形和布局偏移量。 这可以用于在项目，高亮度，视觉分组边界等之间绘制分隔符等等。<br><br>### 3.1 ItemDecoration基本流程 ###<br><br><br>要先绘制自己的装饰器，我们需要了解下ItemDecoration的方法。<br>ItemDecoration包括三个方法。<br><br>&gt; getItemOffsets(Rect outRect, View view, RecyclerView parent, State state)<br><br><br>&gt; onDraw(Canvas c, RecyclerView parent, State state)<br><br><br>&gt; onDrawOver(Canvas c, RecyclerView parent, State state)<br><br><strong>getItemOffsets()</strong><br><br>负责对RecycleView每一个Item上下左右偏移量的测量，什么意思也就是你的每个子View距离上下左右有多少间隔。<br><br><br><strong>onDraw()</strong><br><br>见名知意，就是对你想要装饰的绘制，canvas对象都给你了，你想画什么还不都是你的事？<br><br><strong>onDrawOver()</strong><br><br>与onDraw()类似都是负责装饰的绘制，但是这个方法可以绘制在你ItemView上面，具体什么意思，下面会具体介绍。<br><br><strong>注意</strong><br><br>decoration 的 onDraw，child view 的 onDraw，decoration 的 onDrawOver，这三者是依次发生的<br><br>在 onDraw绘制到 canvas 上，而这个绘制范围可以超出在 getItemOffsets 中设置的范围，但由于 decoration 是绘制在 child view 的底下，所以并不可见，但是会存在 overdraw<br><br>onDrawOver 是绘制在最上层的，所以它的绘制位置并不受限制<br><center><br><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9p0l0f5fj30p00gojrq.jpg" alt=""><br></center><br>正如上文和上图所示，onDraw()的绘制区域是由getItemOffsets测量的结果决定，由于绘制的先后性，RecycleView ItemView 的onDraw方法会覆盖掉getItemOffsets测量以外的区域。由于onDrawOver在最后进行绘制，所以onDrawOver的绘制返回不受限制。<br><br>### 3.2 getItemOffsets() ###<br><br>首先我们先来具体看下getItemOffsets()，getItemOffsets会让你去决定上下左右的偏移尺寸，如下图所示。<br><center><br><img src="http://ww4.sinaimg.cn/large/0060lm7Tly1fj9o0kragzj30p00gowen.jpg" alt=""><br></center>
 
 <p>上下左右这个偏移的尺寸，而这个尺寸，被计入了 RecyclerView 每个 item view 的 padding 中。</p>
 <p>为了验证上面的结论咱们写个例子死一死啊<br><br><br>首先我们创建我们自己的Decoration继承ItemDecoration，先只覆写其中的getItemOffsets方法，然后使得ItemView的上下左右都有10像素的偏移。</p>
