@@ -1,0 +1,1045 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+
+    <title>关于RecycleView你需要知道的之「ItemDecoration」 | </title>
+    <meta name="author" content="flyou">
+    
+    <meta name="description" content="1 前言其实本不打算写RecycleView相关的东西，因为周围一直围绕着RecycleView好用吗？RecycleView简单吗？RecycleView能实现这个功能？的疑问，以及在疑问中坚守ListView的守门员。所以，这个关（Kan）我（bu）什(xia)么(qu)事(le)。
+
+阅读本文">
+    
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="关于RecycleView你需要知道的之「ItemDecoration」"/>
+    <meta property="og:site_name" content="Flyou"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="alternate" href="/atom.xml" title="Flyou" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/lib/materialize.min.css">
+    <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+    
+        <link rel="stylesheet" href="/css/lib/atelier-sulphurpool-dark.css" type="text/css">
+    
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+    <img src="/weixin_favicon.png" style="position: absolute; left: -9999px; opacity: 0; filter: alpha(opacity=0);">
+
+    <nav class="indigo">
+    <div class="nav-wrapper">
+        <a href="#" data-activates="main-menu" class="button-collapse">
+            <i class="fa fa-navicon"></i>
+        </a>
+        <div class="">
+            <a href="/" class="brand-logo hide-on-med-and-down">Flyou</a>
+            <ul class="right hide-on-med-and-down">
+                
+                    <li>
+                        <a class="menu-home " href="/" >
+                            <i class="fa fa-home "></i>
+                            
+                            首页
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-archive " href="/archives" >
+                            <i class="fa fa-archive "></i>
+                            
+                            归档
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                            <i class="fa fa-bookmark "></i>
+                            
+                            分类
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-reading " href="/reading" >
+                            <i class="fa fa-book "></i>
+                            
+                            读书
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-about " href="/about" >
+                            <i class="fa fa-user "></i>
+                            
+                            关于
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-search modal-trigger " href="#search" >
+                            <i class="fa fa-search "></i>
+                            
+                            搜索
+                        </a>
+                    </li>
+                
+            </ul>
+            <div>
+    <ul class="side-nav indigo darken-1" id="main-menu">
+        
+        <li class="side-user">
+            <div class="row">
+                <div class="col s4 no-padding">
+                    <img class="avatar-image circle responsive-img" src="http://tva2.sinaimg.cn/crop.0.3.707.707.180/a2f7c645jw8f6qvlbp1g7j20js0jrgrz.jpg" alt="User Avatar">
+                </div>
+                <div class="info col s8 valign-wrapper no-padding">
+                    <div class="valign">
+                        <p class="name">房泽龙</p>
+                        <p class="desc">Android/Python/技术宅</p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-home " href="/" >
+                    <i class="fa fa-home "></i>
+                    
+                    首页
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-archive " href="/archives" >
+                    <i class="fa fa-archive "></i>
+                    
+                    归档
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                    <i class="fa fa-bookmark "></i>
+                    
+                    分类
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-reading " href="/reading" >
+                    <i class="fa fa-book "></i>
+                    
+                    读书
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-about " href="/about" >
+                    <i class="fa fa-user "></i>
+                    
+                    关于
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-search modal-trigger " href="#search" >
+                    <i class="fa fa-search "></i>
+                    
+                    搜索
+                </a>
+            </li>
+        
+    </ul>
+
+    <ul class="side-nav indigo darken-1" id="category-menu">
+    
+
+            
+
+            <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/随笔/">
+                    随笔 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/随笔/没事闲叨叨/">
+                    没事闲叨叨 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/技术领域/">
+                    技术领域 <span class="right">10 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/网络/">
+                    网络 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/Android/">
+                    Android <span class="right">6 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/android/">
+                    android <span class="right">1 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/技术领域/安全/">
+                    安全 <span class="right">1 篇</span></a>
+                </a>
+            </li>
+
+        
+
+    </ul>
+</div>
+
+        </div>
+    </div>
+</nav>
+
+<div id="search" class="modal search-modal">
+    <div class="row">
+        <div class="input-field col s12">
+              <input id="search-input" type="text">
+              <label for="search-input">搜索</label>
+        </div>
+
+    </div>
+    <div id="search-result" class="search-result col s12">
+
+    </div>
+</div>
+
+
+    <main>
+        <div class="container main-container">
+    <nav class="page-nav hide-on-small-only">
+    <div class="nav-wrapper indigo">
+        <span class="breadcrumb">当前位置（分类目录）</span>
+        
+            
+    
+    
+    <a class="breadcrumb" href="/categories/技术领域/">技术领域</a><a class="breadcrumb" href="/categories/技术领域/android/">android</a>
+
+
+        
+
+        
+    </div>
+</nav>
+
+<article>
+    <div class="card">
+        <div class="card-content">
+            
+
+            <div class="article-title">
+                
+    
+        <h1>关于RecycleView你需要知道的之「ItemDecoration」</h1>
+    
+
+
+            </div>
+            <time class="light-green-link-context" datetime="2017-09-05T03:38:25.000Z"><a href="/2017/09/05/关于RecycleView你需要知道的之「ItemDecoration」/">2017-09-05</a></time>
+
+            
+    <div class="tags-row">
+        
+            <a href="/tags/RecycleView/" class="chip light-green lighten-1">RecycleView</a>
+        
+            <a href="/tags/自定义View/" class="chip light-green lighten-1">自定义View</a>
+        
+    </div>
+
+
+            <div class="toc light-green-link-context hide-on-med-and-down">
+    <ol class="section table-of-contents"><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#1-前言"><span class="section table-of-contents-text">1 前言</span></a></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#2-基本用法"><span class="section table-of-contents-text">2 基本用法</span></a></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#3-ItemDecoration-≠-Split-Line"><span class="section table-of-contents-text">3 ItemDecoration ≠ Split Line</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#3-3-onDraw"><span class="section table-of-contents-text">3.3 onDraw()</span></a></li><li class="section table-of-contents-item section table-of-contents-level-3"><a class="section table-of-contents-link" href="#3-4-onDrawOver"><span class="section table-of-contents-text">3.4 onDrawOver()</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#后记"><span class="section table-of-contents-text">后记</span></a></li></ol>
+</div>
+
+
+            <div class="entry light-green-link-context">
+                <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>其实本不打算写RecycleView相关的东西，因为周围一直围绕着RecycleView好用吗？RecycleView简单吗？RecycleView能实现这个功能？的疑问，以及在疑问中坚守ListView的守门员。所以，这个关（Kan）我（bu）什(xia)么(qu)事(le)。</p>
+<blockquote>
+<p>阅读本文大概需要10分钟，当然也可能是10秒。</p>
+</blockquote>
+<h2 id="2-基本用法"><a href="#2-基本用法" class="headerlink" title="2 基本用法"></a>2 基本用法</h2><p>以下就是RecycleView的基本用法</p>
+<ol>
+<li>在xml中引入RecycleView</li>
+<li>初始化控件</li>
+<li>设置LayoutManager</li>
+<li>设置‘分割线’（可选）</li>
+<li>设置Item动画（可选）</li>
+<li>设置Adapter<center><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tly1fj8os1jjejj308c08ct8r.jpg" alt=""><br></center>
+
+</li>
+</ol>
+<p>是的就是这个样子，不然你还想怎么样？我让我把别人都写过的东西再写一遍？别闹了，乖，我反手扔给你一个链接怎么样？</p>
+<p><a href="http://blog.csdn.net/lmj623565791/article/details/45059587" target="_blank" rel="external">Android RecyclerView 使用完全解析 体验艺术般的控件</a></p>
+<p>鸿洋大婶将的很好，我再写也不是没有必要，主要是我懒啊。。。</p>
+<blockquote>
+<p>阅读本文之前，裂墙建议先阅读上述文章</p>
+</blockquote>
+<h2 id="3-ItemDecoration-≠-Split-Line"><a href="#3-ItemDecoration-≠-Split-Line" class="headerlink" title="3 ItemDecoration ≠ Split Line"></a>3 ItemDecoration ≠ Split Line</h2><p>是谁告诉你们Decoration是分割线的意思了？为什么一提到addItemDecoration（）你们就觉得是添加分割线呢？再看看网上的文章也都是分割线，为了科普下Decoration的真是意思我特地的Google了下</p>
+<center><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9ladixjfj30hq06dwen.jpg" alt=""><br></center><br>人家是装饰的意思有没有，并不是单单的分割线那么简单，造吗？这是知识点，知识点！！<br><br><br>好吧，咱们还是去看看官网上的解释吧<br><br><br>&gt; An ItemDecoration allows the application to add a special drawing and layout offset to specific item views from the adapter’s data set. This can be useful for drawing dividers between items, highlights, visual grouping boundaries and more.<br>&gt;<br>ItemDecoration允许应用程序从适配器的数据集中向特定项目视图添加特殊图形和布局偏移量。 这可以用于在项目，高亮度，视觉分组边界等之间绘制分隔符等等。<br><br>### 3.1 ItemDecoration基本流程<br><br>要先绘制自己的装饰器，我们需要了解下ItemDecoration的方法。<br>ItemDecoration包括三个方法。<br><br>&gt; getItemOffsets(Rect outRect, View view, RecyclerView parent, State state)<br><br><br>&gt; onDraw(Canvas c, RecyclerView parent, State state)<br><br><br>&gt; onDrawOver(Canvas c, RecyclerView parent, State state)<br><br><strong>getItemOffsets()</strong><br><br>负责对RecycleView每一个Item上下左右偏移量的测量，什么意思也就是你的每个子View距离上下左右有多少间隔。<br><br><br><strong>onDraw()</strong><br><br>见名知意，就是对你想要装饰的绘制，canvas对象都给你了，你想画什么还不都是你的事？<br><br><strong>onDrawOver()</strong><br><br>与onDraw()类似都是负责装饰的绘制，但是这个方法可以绘制在你ItemView上面，具体什么意思，下面会具体介绍。<br><br><strong>注意</strong><br><br>decoration 的 onDraw，child view 的 onDraw，decoration 的 onDrawOver，这三者是依次发生的<br><br>在 onDraw绘制到 canvas 上，而这个绘制范围可以超出在 getItemOffsets 中设置的范围，但由于 decoration 是绘制在 child view 的底下，所以并不可见，但是会存在 overdraw<br><br>onDrawOver 是绘制在最上层的，所以它的绘制位置并不受限制<br><center><br><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj9p0l0f5fj30p00gojrq.jpg" alt=""><br></center><br>正如上文和上图所示，onDraw()的绘制区域是由getItemOffsets测量的结果决定，由于绘制的先后性，RecycleView ItemView 的onDraw方法会覆盖掉getItemOffsets测量以外的区域。由于onDrawOver在最后进行绘制，所以onDrawOver的绘制返回不受限制。<br><br>### 3.2 getItemOffsets()<br><br>首先我们先来具体看下getItemOffsets()，getItemOffsets会让你去决定上下左右的偏移尺寸，如下图所示。<br><center><br><img src="http://ww4.sinaimg.cn/large/0060lm7Tly1fj9o0kragzj30p00gowen.jpg" alt=""><br></center>
+
+<p>上下左右这个偏移的尺寸，而这个尺寸，被计入了 RecyclerView 每个 item view 的 padding 中。</p>
+<p>为了验证上面的结论咱们写个例子死一死啊<br><br><br>首先我们创建我们自己的Decoration继承ItemDecoration，先只覆写其中的getItemOffsets方法，然后使得ItemView的上下左右都有10像素的偏移。</p>
+<pre><code>public class SimpleDecoration extends RecyclerView.ItemDecoration {
+@Override
+public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+    super.getItemOffsets(outRect, view, parent, state);
+    outRect.set(10,10,10,10);
+    }
+}
+</code></pre><p>把我们自定义的ItemDecoration设置给RecycleView</p>
+<pre><code>public class SimpleDecorationActivity extends AppCompatActivity {
+private RecyclerView recycleView;
+private List&lt;String&gt; dataList = new ArrayList&lt;&gt;();
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_simple_demo);
+    for (int i = 1; i &lt; 80; i++) {
+
+        dataList.add(&quot;第&quot; + i + &quot;个&quot;);
+    }
+    this.recycleView = (RecyclerView) findViewById(R.id.recycleView);
+    recycleView.setLayoutManager(new LinearLayoutManager(this));
+    SimpleDecoration headerDecoration = new SimpleDecoration();
+    recycleView.addItemDecoration(headerDecoration);
+    recycleView.setAdapter(new RecyclerAdapter(this, dataList));
+}
+}
+</code></pre><p>来嘛，这就是见证奇迹的时刻，啊嘿</p>
+<center><br><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fj9pksf46oj30dc0npmyo.jpg" alt=""><br></center>
+
+<p>纳尼？说好的效果呢？为啥我看不到？</p>
+<p>那是因为ItemView的背景和activity的背景都是白色，来我们给activity布局加个背景颜色再试试</p>
+<center><br><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fjazxoa15oj30dc0np75e.jpg" alt=""><br></center>
+
+<p>可以看到RecycleView的ItemView的上下左右都加上了间隔（同理，如果只设置下面的Offset，只有下面才会有背景颜色），这个颜色其实是背景的颜色，并不是我们绘制的装饰，因为我们还没调用任何的绘制函数。</p>
+<p><strong>可以看到，getItemOffsets()其实就是对ItemView设置Padding，为OnDraw提供绘制控件</strong></p>
+<h3 id="3-3-onDraw"><a href="#3-3-onDraw" class="headerlink" title="3.3 onDraw()"></a>3.3 onDraw()</h3><p>熟悉了getItemOffsets()我们接下来来看看装饰的绘制</p>
+<pre><code>   @Override
+public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {}
+</code></pre><p>可以看到onDraw()中有三个参数，一个Canvas绘制的画布，一个RecyclerView和一个存储RecyclerView状态的State（recycle的滑动状态，位置等，暂时用不到）对象。</p>
+<p>由于我们获得了Canvas对象，所以我们可以画任意我们想要的，那么就简单画一个分隔线吧</p>
+<p>首先获得绘制范围：<br>     private float driverHeight=10f;<br>     private Paint paint;<br>    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {</p>
+<pre><code>super.getItemOffsets(outRect, view, parent, state);
+outRect.set(0,0,0,driverHeight);//只设置底部offset
+}
+</code></pre><p>在构造方法中声明Paint对象</p>
+<pre><code>      public SimpleDecoration() {
+    this.paint=new Paint();
+    paint.setColor(Color.BLUE);
+    paint.setAntiAlias(true);
+    paint.setStyle(Paint.Style.FILL);
+}
+</code></pre><p>在onDraw方法中为每个ItemView绘制分割线</p>
+<pre><code> @Override
+public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDraw(canvas, parent, state);
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+        int top = view.getBottom();
+        float bottom = top + driverHeight;
+        canvas.drawRect(left,top,right,bottom,paint);
+    }
+}
+</code></pre><p><strong>备注：</strong>这里的onDraw绘制是针对于每个ItemView的绘制，需要你自己根据自己的需求完成绘制，而getItemOffsets里面设置的间隔是针对于每个Item，所以这里需要对每一个item View进行绘制。</p>
+<p>其实，上面的代码很简单，就是在每一个Item的底部画了一个长方形而已。</p>
+<center><br><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fjb1l21r0ej30dc0np75g.jpg" alt=""><br></center>
+
+<p>但是这个仅仅是简单的演示，因为这仅仅是针对竖向的LinearLayoutManager而言的，针对于横向的不行了，中间分割线的样式也不能随意定制，下面就贴出一个比较完善的分割线Decoration</p>
+<pre><code>Public class DividerListItemDecoration extends RecyclerView.ItemDecoration {
+private static final int[] ATTRS = new int[]{
+        android.R.attr.listDivider
+};
+
+public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+
+public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+
+private Drawable mDivider;
+
+private int mOrientation;
+
+public DividerListItemDecoration(Context context, int orientation) {
+    final TypedArray a = context.obtainStyledAttributes(ATTRS);
+    mDivider = a.getDrawable(0);
+    a.recycle();
+    setOrientation(orientation);
+}
+
+public DividerListItemDecoration(Context context, int orientation, int drawableId) {
+    mDivider = ContextCompat.getDrawable(context, drawableId);
+    setOrientation(orientation);
+}
+
+public void setOrientation(int orientation) {
+    if (orientation != HORIZONTAL_LIST &amp;&amp; orientation != VERTICAL_LIST) {
+        throw new IllegalArgumentException(&quot;invalid orientation&quot;);
+    }
+    mOrientation = orientation;
+}
+
+//画线 &gt; 就是画出你想要的分割线样式
+@Override
+public void onDraw(Canvas c, RecyclerView parent) {
+    if (mOrientation == VERTICAL_LIST) {
+        drawVertical(c, parent);
+    } else {
+        drawHorizontal(c, parent);
+    }
+
+}
+
+
+public void drawVertical(Canvas c, RecyclerView parent) {
+    final int left = parent.getPaddingLeft();
+    final int right = parent.getWidth() - parent.getPaddingRight();
+
+    final int childCount = parent.getChildCount();
+    for (int i = 0; i &lt; childCount; i++) {
+        final View child = parent.getChildAt(i);
+
+        final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                .getLayoutParams();
+        final int top = child.getBottom() + params.bottomMargin;
+        final int bottom = top + mDivider.getIntrinsicHeight();
+        mDivider.setBounds(left, top, right, bottom);
+        mDivider.draw(c);
+    }
+}
+
+public void drawHorizontal(Canvas c, RecyclerView parent) {
+    final int top = parent.getPaddingTop();
+    final int bottom = parent.getHeight() - parent.getPaddingBottom();
+
+    final int childCount = parent.getChildCount();
+    for (int i = 0; i &lt; childCount; i++) {
+        final View child = parent.getChildAt(i);
+        final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                .getLayoutParams();
+        final int left = child.getRight() + params.rightMargin;
+        final int right = left + mDivider.getIntrinsicHeight();
+        mDivider.setBounds(left, top, right, bottom);
+        mDivider.draw(c);
+    }
+}
+
+//设置条目周边的偏移量
+@Override
+public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+    if (mOrientation == VERTICAL_LIST) {
+        outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+    } else {
+        outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+    }
+}
+}
+</code></pre><p>其实，代码依旧很简单，只不过让用户传入了布局的方向和要绘制的图案，当然可以实现和上面一样的效果，这里就不再贴图了。</p>
+<p><a href="https://github.com/flyou/RecycleViewDecoration/blob/master/library/src/main/java/com/flyou/library/decoration/DividerListItemDecoration.java" target="_blank" rel="external">ListItemDecoration on Github</a></p>
+<p>关于GridItemDecoration的写法和ListItemDecoration类似不再贴代码了，直接反手又给你了一个地址。</p>
+<p><a href="https://github.com/flyou/RecycleViewDecoration/blob/master/library/src/main/java/com/flyou/library/decoration/DividerGridItemDecoration.java" target="_blank" rel="external">GridItemDecoration on Github</a></p>
+<p>那么有人肯定要问了，逼逼了这么多，这不还是分割线吗？别急啊，下面就开始装逼，不对，不对，是说说其他的。</p>
+<center><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fj8qo1om43j306y06ywef.jpg" alt=""><br></center>
+
+<p>上面我们已经提到了，onDraw方法给我们了Canvas对象，那么我们配合getItemOffsets真的是想画什么就画什么啊</p>
+<p>比如，时间轴效果，物流流转效果。</p>
+<center><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tly1fjb38utq79j30dc0npq41.jpg" alt=""><br></center>
+
+<p>原谅我比较懒，原谅我放荡不羁爱自由，界面比较丑，大家可以充分发挥下想象力</p>
+<p>怎么样？是是觉得惊艳了很多？</p>
+<center><br><br><img src="http://ww2.sinaimg.cn/large/0060lm7Tly1fj8qo1p2tyj30du0af74i.jpg" alt=""><br></center>
+
+<p>好啦，好啦不闹了……说说怎么实现吧，那么你觉得应该怎么实现，先不说今天怎么做，就说常规的肯定是在ItemView的布局文件里实现，其实我想说布局复杂点的话布局文件真的不好写……<br><br><br>但是，如果使用ItemDecoration就不一样了，完全不用考虑ItemView里面有什么，布局怎么样。<br>具体怎么做呢？咱们先看看下面的图：</p>
+<center><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fjb45irvgjj30p00gojrq.jpg" alt=""><br></center>
+
+<p>可以看到左边是内容我们需要绘制的区域，右边是内容区域，我们主要是在左侧进行view的绘制就ok了，分隔线怎么实现上面已经讲过了就不在具体赘述了。</p>
+<p>首先我们需要定义分割线的高度（offsetBottom），和左侧宽度（offsetsLeft）圆的半径以及画笔对象如下：</p>
+<pre><code>private float driverHeight=2f;
+private float offsetsLeft=200f;
+private float circleRadius=30f;
+private Paint paint;
+</code></pre><p>当然这些参数可以从构造函数或者其他方法传入，这里仅仅为了演示效果不再写了（对，还是懒……）。</p>
+<p>构造方法初始化Paint对象</p>
+<pre><code>public StepLineDecoration() {
+    this.paint=new Paint();
+    paint.setColor(Color.BLUE);//设置绘制颜色
+    paint.setAntiAlias(true);//抗锯齿
+    paint.setStyle(Paint.Style.FILL);//填充样式
+}
+</code></pre><p>设置onDraw的绘制区域，设置itemView的左侧偏移和底部分割线的偏移</p>
+<pre><code> @Override
+public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+    super.getItemOffsets(outRect, view, parent, state);
+        outRect.set((int) offsetsLeft,0,0, (int) driverHeight);
+}
+</code></pre><p>好的吧，接下来就是左侧和下部分割线的绘制</p>
+<pre><code>@Override
+public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDraw(canvas, parent, state);
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+        int top = view.getBottom();
+        float bottom = top + driverHeight;
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(left,top,right,bottom,paint);//画分割线
+
+        paint.setStrokeWidth(5);//设置竖线的宽度
+        paint.setStyle(Paint.Style.STROKE);//填充类型空心
+        float circleX=left+offsetsLeft/2;//圆心的x坐标
+        float circleY=view.getTop()+(view.getBottom()-view.getTop())/2;//圆心的x坐标
+
+        float topLineStartX=circleX;//上部线条起始X坐标
+        float topLineStartY=view.getTop();//上部线条起始Y坐标
+
+        float topLineEndX=circleX;//上部线条终止X坐标
+        float topLineEndY=circleY-circleRadius;//上部线条终止Y坐标
+
+        float bottomLineStartX=circleX;
+        float bottomLineStartY=circleY+circleRadius;
+
+        float bottomLineEndX=circleX;
+        float bottomLineEndY=view.getBottom();
+
+        paint.setStrokeCap(Paint.Cap.ROUND);//线条头类型
+        canvas.drawLine(topLineStartX,topLineStartY,topLineEndX,topLineEndY,paint);//画上部线条
+        canvas.drawLine(bottomLineStartX,bottomLineStartY,bottomLineEndX,bottomLineEndY,paint);//画底部线条
+        canvas.drawCircle(circleX,circleY,circleRadius,paint);//画圆圈
+
+    }
+}
+</code></pre><p>绘制的流程也很简单，我们首先绘制底部的分割线，然后计算圆心位置线段的起始位置并绘制线段和圆。</p>
+<p>同理，我们可以绘制出许多我们想要的效果，如排名效果：</p>
+<center><br><br><img src="http://ww4.sinaimg.cn/large/0060lm7Tly1fjb4vnj7ysj30dc0npgnf.jpg" alt=""><br></center>
+
+<p>原理和上面类似，简单的额绘制而已，获取圆、测量文字、绘制文字。</p>
+<pre><code> @Override
+public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDraw(canvas, parent, state);
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+        int position = parent.getChildAdapterPosition(view);
+
+        int top = view.getBottom();
+        float bottom = top + driverHeight;
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(left, top, right, bottom, paint);
+        if (position &lt; 3) {
+            rankPaint.setColor(Color.RED);
+        } else {
+            rankPaint.setColor(Color.GRAY);
+        }
+        paint.setStrokeWidth(5);
+        float circleX = left + offsetsLeft / 2;
+        float circleY = view.getTop() + (view.getBottom() - view.getTop()) / 2;
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        Rect bounds = new Rect();
+        String rank = String.valueOf(position+1);
+        textPaint.getTextBounds(rank, 0, rank.length(), bounds);
+        int height = bounds.height();
+        int width = (int) textPaint.measureText(rank, 0, rank.length());
+        canvas.drawCircle(circleX, circleY, circleRadius, rankPaint);
+        canvas.drawText(rank, circleX - width / 2, circleY + height / 2, textPaint);
+
+    }
+</code></pre><h3 id="3-4-onDrawOver"><a href="#3-4-onDrawOver" class="headerlink" title="3.4 onDrawOver()"></a>3.4 onDrawOver()</h3><p>上面已经介绍过了，onDrawOver可以超过getItemOffsets测量的绘制区域，也就是你说他可以覆盖在ItemView上。那么它有什么用？</p>
+<blockquote>
+<p>其实用途也是很多的举个栗子吧还是，比如说ListView中常见的悬浮头效果，在ListView中常见的实现方式都是复写ondraw方法实现的在super.ondraw()方法下绘制上自己想要的头，实现起来可以说是非常的麻烦，但是如果在RecycleView中使用ItemDecoration可以很轻松的实现。</p>
+<center><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tly1fjb887e4ipg30dc0npx6q.gif" alt=""><br></center>
+
+</blockquote>
+<p>由于要实现浮选效果，onDraw方法自然就没办法满足了，使用onDrawOver方法可以很轻松实现这个效果。</p>
+<p>定义针对于头的Bean<br>    public class StickyHeadeBean {<br>    private String title;<br>    private boolean isFirst;//列表第一个<br>    private boolean isTeamFirst;//是否是组内第一个<br>    private boolean isTeamLast;//是否是组内最后一个<br>    }<br>首先我们为绘制获得Offset</p>
+<p>如果是组内第一个元素则设置topOffset为header的高度，否则则为分割线的高度</p>
+<pre><code>    @Override
+public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+    super.getItemOffsets(outRect, view, parent, state);
+    if (dataList.get(parent.getChildAdapterPosition(view)).isTeamFirst()) {
+        outRect.set(0, (int) offsetsLeft, 0, 0);
+    } else {
+        outRect.set(0, (int) driverHeight, 0, 0);
+    }
+}
+</code></pre><p><strong>onDraw</strong></p>
+<p>在这里仅仅绘制分割线，头部布局在onDrawOver中统一绘制</p>
+<pre><code>@Override
+public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDraw(canvas, parent, state);
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+
+        if (dataList.get(parent.getChildAdapterPosition(view)).isTeamFirst()) {//头部在OndrawOver中绘制
+
+        } else {
+            int bottom = view.getTop();
+            float top = bottom - driverHeight;
+            canvas.drawRect(left, top, right, bottom, paint);
+        }
+
+
+    }
+}
+</code></pre><p><strong>onDrawOver</strong></p>
+<p>首先我们需要知道绘制头的条件：<br>1.屏幕内第一个可见的元素<br>2.如果它不是屏幕内第一个可见的元素，但是它是组内第一个可见的元素</p>
+<p>代码如下：</p>
+<pre><code>@Override
+public void onDrawOver(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDrawOver(canvas, parent, state);
+
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+        int childAdapterPosition = parent.getChildAdapterPosition(view);
+        StickyHeadeBean stickyHeadeBean = dataList.get(childAdapterPosition);
+        if (i != 0) {//不是第一个元素时，只有组内第一个才绘制
+            if (stickyHeadeBean.isTeamFirst()) {
+                int bottom = view.getTop();
+                float top = bottom - offsetsLeft;
+                drawHeader(canvas, left, right, (int) top, bottom, view);
+            }
+        } else {
+                //第一个元素直接绘制
+            int top = view.getPaddingTop();
+            int bottom = (int) (top + offsetsLeft);
+            drawHeader(canvas, left, right, top, bottom, view);
+
+        }
+    }
+}
+</code></pre><p>绘制头部的代码：</p>
+<pre><code>  private void drawHeader(Canvas canvas, int left, int right, int top, int bottom, View view) {
+
+    canvas.drawRect(left, top, right, bottom, paint);
+    int textX = (int) ((right - left) / 2 - textWidth / 2);
+    int textY = (int) (bottom - offsetsLeft / 2 + textHeight / 2);
+    Log.d(TAG, &quot;onDraw: &quot; + textY);
+    canvas.drawText(headerText, textX, textY, mTextPaint);
+}
+</code></pre><p>写完代码，满心欢喜地运行下</p>
+<p>嗯嗯，效果还不错但是，下一个头是直接盖在了上一个上面，效果并不是很优雅，所以我们需要判断元素是否是组内最后一个来把自己给推上去</p>
+<pre><code> @Override
+public void onDrawOver(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    super.onDrawOver(canvas, parent, state);
+
+
+    int childCount = parent.getChildCount();
+    int left = parent.getPaddingLeft();
+    int right = parent.getWidth() - parent.getPaddingRight();
+    for (int i = 0; i &lt; childCount; i++) {
+        View view = parent.getChildAt(i);
+        int childAdapterPosition = parent.getChildAdapterPosition(view);
+        StickyHeadeBean stickyHeadeBean = dataList.get(childAdapterPosition);
+        if (i != 0) {
+            if (stickyHeadeBean.isTeamFirst()) {
+                int bottom = view.getTop();
+                float top = bottom - offsetsLeft;
+                drawHeader(canvas, left, right, (int) top, bottom, view);
+            }
+        } else {
+
+            int top = view.getPaddingTop();
+            //判断是否为组内最后一个，如果是，则头的位置需要随View改变
+            if (stickyHeadeBean.isTeamLast()){
+                int suggestTop = (int) (view.getBottom() - offsetsLeft);
+                if (suggestTop&lt;top){
+                    top=suggestTop;
+                }
+
+            }
+            int bottom = (int) (top + offsetsLeft);
+            drawHeader(canvas, left, right, top, bottom, view);
+
+        }
+    }
+}
+</code></pre><p>加上上面的判断，再次运行就是我们想要的效果了</p>
+<center><br><img src="http://ww3.sinaimg.cn/large/0060lm7Tly1fjb9e651dcg30dc0np1ky.gif" alt=""><br></center>
+
+
+<p>ItemDecoration其实很简单，但是确实可以完成很多炫酷的效果，我这么帅怎么肯能骗你？</p>
+<p>照例贴上代码地址 <a href="https://github.com/flyou/RecycleViewDecoration" title="点位查看" target="_blank" rel="external">点我查看</a></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>写着，写着就写了好长，最后还是觉得分开几篇讲比较好。下篇我们看下LayoutManager</p>
+<center><br><img src="http://ww1.sinaimg.cn/large/0060lm7Tly1fj8qo1phnvj308c08ct8q.jpg" alt=""><br></center>
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+     <section id="comment">
+        <div class="card">
+            <div class="card-content">
+             <div id="SOHUCS" sid="" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyt87i6kT'; 
+var conf = 'prod_3826ef6eaf386f17fc41d2cdb320126a'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+</div>
+
+        <div class="fixed-action-btn float-sitemap">
+    <a class="btn-floating btn-large light-green">
+      <i class="fa fa-caret-square-o-up"></i>
+    </a>
+    <ul>
+      <li><a class="btn-return-top btn-floating waves-effect pink" title="回到顶部"><i class="fa fa-arrow-circle-o-up"></i></a></li>
+      <li><a class="btn-floating waves-effect button-collapse yellow darken-1"  data-activates="main-menu" title="menu"><i class="fa fa-navicon"></i></a></li>
+    </ul>
+  </div>
+
+    </main>
+    <footer class="page-footer indigo darken-1">
+    
+    <div class="container">
+        <div class="row">
+            
+            <div class="social-group col m3 s12">
+                <h5 class="white-text">社交</h5>
+                
+                    <a class="social-link" href="http://weibo.com/fangjaylong" target="_blank">
+                        <i class="fa fa-2x fa-weibo"></i>
+                    </a>
+                
+                    <a class="social-link" href="https://github.com/flyou" target="_blank">
+                        <i class="fa fa-2x fa-github"></i>
+                    </a>
+                
+                    <a class="social-link" href="/atom.xml" target="_blank">
+                        <i class="fa fa-2x fa-rss"></i>
+                    </a>
+                
+            </div>
+            
+
+            
+            <div class="col m9 s12">
+                <h5 class="white-text">友情链接</h5>
+                
+                    <a class="social-link" href="http://gank.io/" target="_blank">干货集中营</a>
+                
+                    <a class="social-link" href="http://www.androiddevtools.cn/" target="_blank">AndroidDevTools</a>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <div class="footer-copyright light-green-link-context">
+        <div class="container">
+            © 2016 flyou.ren, All rights reserved.
+            <p class="right" style="margin-top: 0;"><a href="http://blog.flyou.ren">返回旧版</a> </p>
+			 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span style="margin-left: 80px;" id="busuanzi_container_site_pv">您是本站第 <span id="busuanzi_value_site_pv"></span> 位访问者</span>
+        </div>
+    </div>
+</footer>
+
+
+    <noscript>
+    <div class="noscript">
+        <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+    </div>
+</noscript>
+<div class="noscript">
+    <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+</div>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+
+<script>
+    (function($) {
+        $(document).ready(function() {
+            // 隐藏禁用javascript（针对微信内置浏览器）的提示
+            $('.noscript').hide();
+
+            // 图片缩放效果
+            var $imgs = $('img').not('.slider-image').not('.avatar-image').not('.carousel-image').not('.card-cover-image').not('.qrcode');
+
+            // 给图片加上点击放大效果（materialbox插件）
+            $imgs.addClass('materialboxed').each(function(i, el) {
+                $(this).attr('data-caption', $(this).attr('alt') || ' ');
+            }).materialbox();
+
+            // 优化表格的显示
+            $('table').each(function() {
+                var $table = $(this);
+                // 除去多行代码的情况
+                if ($table.find('pre').length == 0) {
+                    $table.addClass('responsive-table striped bordered');
+                }
+            });
+
+            // 首页幻灯片
+            $('.slider').slider({indicators: true, full_width: true, interval: 8000});
+
+            $(".button-collapse").sideNav();
+            $(".category-menu").sideNav();
+
+            // 针对gallery post
+            $('.carousel').carousel({full_width: true});
+            $('.carousel-control.prev').click(function() {
+                $('.carousel').carousel('prev');
+            });
+            $('.carousel-control.next').click(function() {
+                $('.carousel').carousel('next');
+            });
+
+            // 文章目录
+            $('article').not('.simple-article').find('h1').add('h2').add('h3').add('h4').add('h5').add('h6').scrollSpy();
+            // 修正文章目录的left-border颜色
+            var color = $('.table-of-contents-text').css('color');
+            $('.table-of-contents-link').css('border-left-color', color);
+
+            // 针对移动端做的优化：FAB按钮点击一下收回
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $('.fixed-action-btn').addClass('click-to-toggle');
+            }
+            // 回到顶部
+            $('.btn-return-top').click(function() {
+                $('body, html').animate({
+                    scrollTop: 0
+                }, 500);
+            });
+
+            // 重置读书页面的Tab标签页的颜色
+            $('li.tab a').hover(function() {
+                $(this).toggleClass('text-lighten-4');
+            });
+            $('.indicator').addClass('light-green lighten-2');
+
+            
+            // 添加new标签
+            $('.menu-reading, .menu-about').append('<span class="new badge light-green"></span>');
+            
+
+            // 搜索功能
+            $('.modal-trigger').leanModal({
+                // 打开搜索框时自动聚焦
+                ready: function() {
+                    if ($('#search').is(":visible")) {
+                        $('#search-input').focus();
+                    }
+                }
+            });
+            var searchXml = "search.xml";
+            if (searchXml.length == 0) {
+             	searchXml = "search.xml";
+            }
+            var searchPath = "/" + searchXml;
+            initSearch(searchPath, 'search-input', 'search-result');
+        });
+
+        // 初始化搜索与匹配函数
+        var initSearch = function(path, search_id, content_id) {
+            'use strict';
+            $.ajax({
+                url: path,
+                dataType: "xml",
+                success: function(xmlResponse) {
+                    // get the contents from search data
+                    var datas = $("entry", xmlResponse).map(function() {
+                        return {
+                            title: $("title", this).text(),
+                            content: $("content", this).text(),
+                            url: $("url", this).text()
+                        };
+                    }).get();
+                    var $input = document.getElementById(search_id);
+                    var $resultContent = document.getElementById(content_id);
+                    $input.addEventListener('input', function() {
+                        var str = '<ul class=\"search-result-list\">';
+                        var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                        $resultContent.innerHTML = "";
+                        if (this.value.trim().length <= 0) {
+                            return;
+                        }
+                        // perform local searching
+                        datas.forEach(function(data) {
+                            var isMatch = true;
+                            var content_index = [];
+                            var data_title = data.title.trim().toLowerCase();
+                            var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                            var data_url = data.url;
+                            var index_title = -1;
+                            var index_content = -1;
+                            var first_occur = -1;
+                            // only match artiles with not empty titles and contents
+                            if (data_title != '' && data_content != '') {
+                                keywords.forEach(function(keyword, i) {
+                                    index_title = data_title.indexOf(keyword);
+                                    index_content = data_content.indexOf(keyword);
+                                    if (index_title < 0 && index_content < 0) {
+                                        isMatch = false;
+                                    } else {
+                                        if (index_content < 0) {
+                                            index_content = 0;
+                                        }
+                                        if (i == 0) {
+                                            first_occur = index_content;
+                                        }
+                                    }
+                                });
+                            }
+                            // show search results
+                            if (isMatch) {
+                                keywords.forEach(function(keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    data_title = data_title.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
+                                });
+
+                                str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                                var content = data.content.trim().replace(/<[^>]+>/g, "");
+                                if (first_occur >= 0) {
+                                    // cut out 100 characters
+                                    var start = first_occur - 20;
+                                    var end = first_occur + 80;
+                                    if (start < 0) {
+                                        start = 0;
+                                    }
+                                    if (start == 0) {
+                                        end = 100;
+                                    }
+                                    if (end > content.length) {
+                                        end = content.length;
+                                    }
+                                    var match_content = content.substring(start, end);
+                                    // highlight all keywords
+                                    keywords.forEach(function(keyword) {
+                                        var regS = new RegExp(keyword, "gi");
+                                        match_content = match_content.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
+                                    });
+
+                                    str += "<p class=\"search-result\">..." + match_content + "...</p>"
+                                }
+                                str += "</li>";
+                            }
+                        });
+                        str += "</ul>";
+                        $resultContent.innerHTML = str;
+                    });
+                }
+            });
+        }
+    })(jQuery);
+</script>
+
+
+<script src="/js/prettify.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("pre").addClass("prettyprint");
+        prettyPrint();
+    });
+</script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</body>
+</html>
