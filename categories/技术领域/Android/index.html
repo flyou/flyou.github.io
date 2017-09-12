@@ -7,7 +7,7 @@
 
     
 
-    <title>android | </title>
+    <title>Android | </title>
     <meta name="author" content="flyou">
     
     
@@ -169,8 +169,24 @@
             
 
             <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/随笔/">
+                    随笔 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-1" collapse-level="1">
+                <a class="no-padding" href="/categories/随笔/没事闲叨叨/">
+                    没事闲叨叨 <span class="right">2 篇</span></a>
+                </a>
+            </li>
+
+        
+
+            <li class="collapse-level-0" collapse-level="0">
                 <a class="no-padding" href="/categories/技术领域/">
-                    技术领域 <span class="right">10 篇</span></a>
+                    技术领域 <span class="right">11 篇</span></a>
                 </a>
             </li>
 
@@ -194,7 +210,7 @@
 
             <li class="collapse-level-1" collapse-level="1">
                 <a class="no-padding" href="/categories/技术领域/android/">
-                    android <span class="right">1 篇</span></a>
+                    android <span class="right">2 篇</span></a>
                 </a>
             </li>
 
@@ -203,22 +219,6 @@
             <li class="collapse-level-1" collapse-level="1">
                 <a class="no-padding" href="/categories/技术领域/安全/">
                     安全 <span class="right">1 篇</span></a>
-                </a>
-            </li>
-
-        
-
-            <li class="collapse-level-0" collapse-level="0">
-                <a class="no-padding" href="/categories/随笔/">
-                    随笔 <span class="right">2 篇</span></a>
-                </a>
-            </li>
-
-        
-
-            <li class="collapse-level-1" collapse-level="1">
-                <a class="no-padding" href="/categories/随笔/没事闲叨叨/">
-                    没事闲叨叨 <span class="right">2 篇</span></a>
                 </a>
             </li>
 
@@ -255,7 +255,7 @@
         
 
         
-            <a class="breadcrumb" href="/categories/技术领域/android/">android</a>
+            <a class="breadcrumb" href="/categories/技术领域/Android/">Android</a>
         
     </div>
 </nav>
@@ -264,10 +264,40 @@
 
     <div class="collection mt-0">
         
-            <a href="/2017/09/05/关于RecycleView你需要知道的之「ItemDecoration」/" class="collection-item grey-text text-darken-1">
-                <time datetime="2017-09-05T03:38:25.000Z">2017-09-05</time>
+            <a href="/2017/04/05/关于RxJava背压/" class="collection-item grey-text text-darken-1">
+                <time datetime="2017-04-05T10:42:14.000Z">2017-04-05</time>
                 <span>&nbsp;&nbsp;&nbsp;</span>
-                关于RecycleView你需要知道的之「ItemDecoration」
+                关于RxJava背压
+            </a>
+        
+            <a href="/2017/03/02/属性动画入门实践/" class="collection-item grey-text text-darken-1">
+                <time datetime="2017-03-01T17:46:32.000Z">2017-03-02</time>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                属性动画入门实践
+            </a>
+        
+            <a href="/2017/01/13/Dagger2入门/" class="collection-item grey-text text-darken-1">
+                <time datetime="2017-01-13T05:55:52.000Z">2017-01-13</time>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                Dagger2入门
+            </a>
+        
+            <a href="/2016/09/13/微信扫一扫揭秘/" class="collection-item grey-text text-darken-1">
+                <time datetime="2016-09-13T05:55:52.000Z">2016-09-13</time>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                微信扫一扫揭秘
+            </a>
+        
+            <a href="/2016/09/12/关于截图你所要了解的一切/" class="collection-item grey-text text-darken-1">
+                <time datetime="2016-09-12T07:01:38.000Z">2016-09-12</time>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                关于截图你所要了解的一切
+            </a>
+        
+            <a href="/2016/08/18/android夜间模式浅析/" class="collection-item grey-text text-darken-1">
+                <time datetime="2016-08-18T11:05:25.000Z">2016-08-18</time>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                android夜间模式浅析
             </a>
         
     </div>
@@ -503,55 +533,6 @@
                                     if (end > content.length) {
                                         end = content.length;
                                     }
-                                    var match_content = content.substring(start, end);
-                                    // highlight all keywords
-                                    keywords.forEach(function(keyword) {
-                                        var regS = new RegExp(keyword, "gi");
-                                        match_content = match_content.replace(regS, "<span class=\"search-keyword light-green lighten-2\">" + keyword + "</span>");
-                                    });
-
-                                    str += "<p class=\"search-result\">..." + match_content + "...</p>"
-                                }
-                                str += "</li>";
-                            }
-                        });
-                        str += "</ul>";
-                        $resultContent.innerHTML = str;
-                    });
-                }
-            });
-        }
-    })(jQuery);
-</script>
-
-
-<script src="/js/prettify.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("pre").addClass("prettyprint");
-        prettyPrint();
-    });
-</script>
-
-
-
-
-
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-});
-</script>
-<script type="text/javascript" async
-  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
-
-</body>
-</html>
-           }
                                     var match_content = content.substring(start, end);
                                     // highlight all keywords
                                     keywords.forEach(function(keyword) {
